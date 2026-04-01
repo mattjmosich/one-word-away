@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kim Raimondo — Visibility & Vision Advisory</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --brand: #1C3D35;
+  --brand-light: #E8F0EE;
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --border: rgba(28,61,53,0.15);
+  --border-strong: rgba(28,61,53,0.3);
+  --text: #1a1a18;
+  --text-muted: #6b6b67;
+  --text-hint: #9b9b97;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+body { font-family: var(--font-sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+#app { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.header { display: flex; align-items: center; gap: 14px; padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.header-bar { width: 5px; height: 44px; background: var(--brand); border-radius: 3px; flex-shrink: 0; }
+.header-text { flex: 1; }
+.header h1 { font-family: var(--font-serif); font-size: 24px; font-weight: normal; color: var(--text); line-height: 1.2; }
+.header p { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; margin-top: 3px; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.btn-export { background: none; border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 7px 14px; cursor: pointer; font-size: 12px; font-family: var(--font-sans); color: var(--text-muted); display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
+.btn-export:hover { border-color: var(--brand); color: var(--brand); }
+.btn-import { background: none; border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 7px 14px; cursor: pointer; font-size: 12px; font-family: var(--font-sans); color: var(--text-muted); display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
+.btn-import:hover { border-color: var(--brand); color: var(--brand); }
+.tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+.tab-btn { padding: 10px 20px; border: none; background: none; cursor: pointer; font-size: 13px; font-family: var(--font-sans); color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; }
+.tab-btn.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 500; }
+.tab-btn:hover:not(.active) { color: var(--text); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.hint { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
+.field-group { margin-bottom: 1.5rem; }
+.field-label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.field-label-editable { border: none; background: transparent; outline: none; font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--text); width: 100%; display: block; margin-bottom: 4px; }
+.field-hint { font-size: 12px; color: var(--text-muted); font-style: italic; margin-bottom: 6px; line-height: 1.5; }
+textarea, input[type=text], input[type=date] {
+  width: 100%; border: 1px solid var(--border-strong); border-radius: var(--radius-md);
+  padding: 10px 12px; font-size: 14px; font-family: var(--font-sans); color: var(--text);
+  background: var(--surface); outline: none; transition: border-color 0.15s; line-height: 1.6;
+}
+textarea { resize: vertical; }
+textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: var(--brand); }
+.btn-primary { background: var(--brand); color: #fff; border: none; border-radius: var(--radius-md); padding: 8px 18px; cursor: pointer; font-size: 13px; font-weight: 500; font-family: var(--font-sans); transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.88; }
+.btn-secondary { background: none; color: var(--text-muted); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 8px 18px; cursor: pointer; font-size: 13px; font-family: var(--font-sans); }
+.btn-ghost { background: none; border: none; cursor: pointer; color: var(--text-hint); font-size: 18px; padding: 0 4px; line-height: 1; transition: color 0.1s; }
+.btn-ghost:hover { color: var(--text); }
+.btn-add-dashed { width: 100%; background: none; border: 1px dashed var(--brand-light); border-radius: var(--radius-lg); padding: 12px; cursor: pointer; font-size: 13px; color: var(--brand); font-weight: 500; font-family: var(--font-sans); transition: background 0.1s; }
+.btn-add-dashed:hover { background: var(--brand-light); }
+.project-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 12px; }
+.project-header { padding: 12px 16px; border-left: 3px solid var(--brand); display: flex; align-items: flex-start; gap: 10px; }
+.priority-badge select { background: var(--brand); color: #fff; border: none; border-radius: var(--radius-sm); padding: 3px 8px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); }
+.project-title-input { border: none; background: transparent; outline: none; font-family: var(--font-serif); font-size: 16px; color: var(--text); width: 100%; display: block; }
+.project-notes-input { border: none; background: transparent; outline: none; font-family: var(--font-sans); font-size: 12px; color: var(--text-muted); width: 100%; display: block; margin-top: 2px; }
+.milestone-row { display: grid; grid-template-columns: 1fr 130px 130px 28px; align-items: center; gap: 8px; padding: 8px 16px 8px 28px; border-top: 1px solid var(--border); }
+.milestone-input { border: none; background: transparent; outline: none; font-family: var(--font-sans); font-size: 13px; color: var(--text); width: 100%; }
+.milestone-input::placeholder { color: var(--text-hint); }
+.status-badge { border: none; border-radius: var(--radius-sm); padding: 3px 8px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); }
+.status-not-started { background: #f0efea; color: #6b6b67; }
+.status-in-progress { background: #e6f1fb; color: #185fa5; }
+.status-complete { background: #eaf3de; color: #3b6d11; }
+.status-on-hold { background: #faeeda; color: #854f0b; }
+.milestone-add-row { padding: 8px 16px 8px 28px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+.milestone-add-input { flex: 1; border: none; background: transparent; outline: none; font-family: var(--font-sans); font-size: 13px; color: var(--text-muted); }
+.milestone-add-input::placeholder { color: var(--text-hint); }
+.btn-add-inline { background: none; border: none; cursor: pointer; font-size: 13px; color: var(--brand); font-weight: 500; font-family: var(--font-sans); padding: 0 4px; flex-shrink: 0; }
+.add-project-form { background: var(--surface); border: 1px solid var(--brand); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
+.add-project-form .row { display: flex; gap: 8px; align-items: center; }
+.add-project-form .row select { background: var(--brand); color: #fff; border: none; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); flex-shrink: 0; }
+.form-btns { display: flex; gap: 8px; justify-content: flex-end; }
+.mind-input-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+.mind-input-row input { flex: 1; }
+.mind-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 8px; }
+.mind-item-body { flex: 1; }
+.mind-item-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+.mind-item-date { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
+.empty-state { font-size: 13px; color: var(--text-hint); text-align: center; padding: 3rem 0; }
+.session-log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.session-form { background: var(--surface); border: 1px solid var(--brand); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 12px; }
+.session-form label { font-size: 12px; font-weight: 500; color: var(--text-muted); display: block; margin-bottom: 4px; }
+.session-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 10px; }
+.session-card-header { padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-left: 3px solid var(--brand); }
+.session-card-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.session-card-body { padding: 0 16px 16px; border-top: 1px solid var(--border); display: none; }
+.session-card-body.open { display: block; }
+.session-field { margin-top: 12px; }
+.session-field-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+.session-field-value { font-size: 13px; color: var(--text); line-height: 1.6; white-space: pre-wrap; }
+.chevron { font-size: 11px; color: var(--text-hint); margin-left: 8px; }
+.vision-custom-field { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 12px; position: relative; }
+.add-vision-form { background: var(--surface); border: 1px solid var(--brand); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+.toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: var(--brand); color: #fff; padding: 10px 20px; border-radius: var(--radius-md); font-size: 13px; font-family: var(--font-sans); opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; }
+.toast.show { opacity: 1; }
+.saving-indicator { position: fixed; bottom: 1.5rem; right: 1.5rem; font-size: 11px; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 5px 12px; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 998; }
+.saving-indicator.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="header-bar"></div>
+    <div class="header-text">
+      <h1>Kim Raimondo</h1>
+      <p>VISIBILITY &amp; VISION ADVISORY — MATT MOSICH</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-import" onclick="document.getElementById('import-input').click()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Import
+      </button>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(this)">
+      <button class="btn-export" onclick="exportData()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 11V2M4 5l4-4 4 4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('vision')">Vision</button>
+    <button class="tab-btn" onclick="switchTab('projects')">Projects</button>
+    <button class="tab-btn" onclick="switchTab('mind')">On My Mind</button>
+    <button class="tab-btn" onclick="switchTab('sessions')">Session Log</button>
+  </div>
+
+  <!-- VISION -->
+  <div id="tab-vision" class="tab-content active">
+    <p class="hint">Know where we're going so we can map the way there.</p>
+    <div class="field-group">
+      <label class="field-label">The core belief</label>
+      <p class="field-hint">Underneath all of it — what's the one belief you keep coming back to?</p>
+      <textarea id="v-belief" rows="3" placeholder="..." oninput="saveVision()"></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Who you're becoming</label>
+      <p class="field-hint">You've built things your whole career. Who are you becoming now that the building is mostly done?</p>
+      <textarea id="v-becoming" rows="3" placeholder="..." oninput="saveVision()"></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label">What gets a yes</label>
+      <p class="field-hint">The opportunities aligned with where you're going.</p>
+      <textarea id="v-yes" rows="3" placeholder="..." oninput="saveVision()"></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label">What doesn't</label>
+      <p class="field-hint">The things that used to get your attention but won't anymore.</p>
+      <textarea id="v-no" rows="3" placeholder="..." oninput="saveVision()"></textarea>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Legacy</label>
+      <p class="field-hint">What do you want to still be true 10 years after you've stopped actively pushing it?</p>
+      <textarea id="v-legacy" rows="3" placeholder="..." oninput="saveVision()"></textarea>
+    </div>
+    <div id="vision-custom-fields"></div>
+    <div id="add-vision-form" style="display:none" class="add-vision-form">
+      <div>
+        <label class="field-label" style="margin-bottom:6px">Field name</label>
+        <input type="text" id="new-vision-label" placeholder="e.g. The audience, The tone..." style="margin-bottom:8px">
+        <label class="field-label" style="margin-bottom:6px">Prompt (optional)</label>
+        <input type="text" id="new-vision-hint" placeholder="A question or note to guide the answer...">
+      </div>
+      <div class="form-btns">
+        <button class="btn-secondary" onclick="document.getElementById('add-vision-form').style.display='none'">Cancel</button>
+        <button class="btn-primary" onclick="addVisionField()">Add field</button>
+      </div>
+    </div>
+    <button class="btn-add-dashed" onclick="showAddVisionField()">+ Add field</button>
+  </div>
+
+  <!-- PROJECTS -->
+  <div id="tab-projects" class="tab-content">
+    <div id="projects-list"></div>
+    <div id="add-project-form" style="display:none" class="add-project-form">
+      <div class="row">
+        <select id="new-pri">
+          <option>A+</option><option selected>A</option><option>A-</option>
+          <option>B+</option><option>B</option><option>B-</option><option>C</option>
+        </select>
+        <input type="text" id="new-proj-name" placeholder="Project name..." onkeydown="if(event.key==='Enter')addProject()">
+      </div>
+      <div class="form-btns">
+        <button class="btn-secondary" onclick="document.getElementById('add-project-form').style.display='none'">Cancel</button>
+        <button class="btn-primary" onclick="addProject()">Add project</button>
+      </div>
+    </div>
+    <button class="btn-add-dashed" onclick="showAddProject()">+ Add project</button>
+  </div>
+
+  <!-- ON MY MIND -->
+  <div id="tab-mind" class="tab-content">
+    <p class="hint">Add it when you think of it.</p>
+    <div class="mind-input-row">
+      <input type="text" id="mind-input" placeholder="What's on your mind..." onkeydown="if(event.key==='Enter')addMind()">
+      <button class="btn-primary" onclick="addMind()">Add</button>
+    </div>
+    <div id="mind-list"></div>
+  </div>
+
+  <!-- SESSION LOG -->
+  <div id="tab-sessions" class="tab-content">
+    <div class="session-log-header">
+      <span class="hint" style="margin:0">What we covered, what you committed to.</span>
+      <button class="btn-primary" onclick="showSessionForm()">+ Log a session</button>
+    </div>
+    <div id="session-form-container" style="display:none" class="session-form">
+      <div>
+        <label>Date</label>
+        <input type="date" id="s-date" style="width:auto">
+      </div>
+      <div>
+        <label>What we covered</label>
+        <textarea id="s-covered" rows="3" placeholder="Topics, decisions, breakthroughs..."></textarea>
+      </div>
+      <div>
+        <label>Commitments</label>
+        <textarea id="s-commitments" rows="2" placeholder="What Kim committed to..."></textarea>
+      </div>
+      <div>
+        <label>Next steps</label>
+        <textarea id="s-next" rows="2" placeholder="What's coming up..."></textarea>
+      </div>
+      <div class="form-btns">
+        <button class="btn-secondary" onclick="document.getElementById('session-form-container').style.display='none'">Cancel</button>
+        <button class="btn-primary" onclick="saveSession()">Save session</button>
+      </div>
+    </div>
+    <div id="sessions-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="saving-indicator" id="saving-indicator">Saving…</div>
+
+<script>
+// =============================================================================
+// CONSTANTS & STATE
+// =============================================================================
+const { createClient } = supabase;
+
+const STATUS_CLASSES = {
+  'Not Started': 'status-not-started',
+  'In Progress': 'status-in-progress',
+  'Complete':    'status-complete',
+  'On Hold':     'status-on-hold'
+};
+const STATUS_OPTS   = ['Not Started', 'In Progress', 'Complete', 'On Hold'];
+const PRIORITY_OPTS = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C'];
+
+const DEFAULT_PROJECTS = [
+  { id:'p1', priority:'A', name:"All My Friends They're Dead", notes:'Book 1. The launching point.', milestones:[
+    { id:'m1', text:'Finalize first draft',                    dueDate:'', status:'In Progress'  },
+    { id:'m2', text:'Identify publisher / self-publishing path', dueDate:'', status:'Not Started' },
+    { id:'m3', text:'Build launch plan',                       dueDate:'', status:'Not Started'  },
+  ]},
+  { id:'p2', priority:'A', name:"Women's Platform", notes:'For women, by women. Financial literacy + independence.', milestones:[
+    { id:'m4', text:'Define audience, purpose, and positioning', dueDate:'', status:'Not Started' },
+    { id:'m5', text:'Name and brand concept',                    dueDate:'', status:'Not Started' },
+  ]},
+  { id:'p3', priority:'B', name:'Age of Alignment', notes:'Book 2. AI + humanity. The HumanAlpha thesis.', milestones:[
+    { id:'m6', text:'Outline chapter structure', dueDate:'', status:'Not Started' },
+  ]},
+  { id:'p4', priority:'B', name:'Thought Leadership / LinkedIn', notes:'Platform for ideas. Content and presence.', milestones:[
+    { id:'m7', text:'Define content pillars and cadence', dueDate:'', status:'Not Started' },
+  ]},
+];
+
+let db             = null;
+let projects       = [];
+let mind           = [];
+let sessions       = [];
+let visionCustom   = [];
+
+let visionDebounceTimer = null;
+const customFieldDebounceTimers = new Map();
+let activeSaves = 0;
+
+// =============================================================================
+// INIT & DATA LOADING
+// =============================================================================
+async function init() {
+  try {
+    const cfg = await fetch('/api/config').then(r => r.json());
+    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) {
+      throw new Error('Supabase environment variables are not configured.');
+    }
+    db = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+    await loadAll();
+    setupRealtime();
+  } catch (err) {
+    console.error('Init error:', err);
+    const ind = document.getElementById('saving-indicator');
+    ind.textContent = 'Connection error — refresh to retry';
+    ind.classList.add('show');
+  }
+}
+
+async function loadAll() {
+  const { data, error } = await db.from('tracker_data').select('key, value');
+  if (error) throw error;
+
+  const map = Object.fromEntries((data || []).map(r => [r.key, r.value]));
+
+  // Vision
+  const v = map['vision'] || {};
+  document.getElementById('v-belief').value   = v.belief   || '';
+  document.getElementById('v-becoming').value = v.becoming || '';
+  document.getElementById('v-yes').value      = v.yes      || '';
+  document.getElementById('v-no').value       = v.no       || '';
+  document.getElementById('v-legacy').value   = v.legacy   || '';
+
+  // Vision custom
+  visionCustom = map['vision_custom'] || [];
+  renderVisionCustom();
+
+  // Projects — seed defaults only on very first load
+  if ('projects' in map) {
+    projects = map['projects'];
+  } else {
+    projects = DEFAULT_PROJECTS;
+    saveData('projects', projects);
+  }
+  renderProjects();
+
+  // Mind
+  mind = map['mind'] || [];
+  renderMind();
+
+  // Sessions
+  sessions = map['sessions'] || [];
+  renderSessions();
+}
+
+// =============================================================================
+// REAL-TIME SYNC
+// =============================================================================
+function setupRealtime() {
+  db.channel('tracker')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tracker_data' }, handleRemote)
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tracker_data' }, handleRemote)
+    .subscribe();
+}
+
+function handleRemote(payload) {
+  const { key, value } = payload.new;
+
+  if (key === 'vision') {
+    const fieldMap = {
+      belief:   'v-belief',
+      becoming: 'v-becoming',
+      yes:      'v-yes',
+      no:       'v-no',
+      legacy:   'v-legacy',
+    };
+    for (const [k, id] of Object.entries(fieldMap)) {
+      const el = document.getElementById(id);
+      if (el && el !== document.activeElement) el.value = value[k] || '';
+    }
+
+  } else if (key === 'vision_custom') {
+    visionCustom = value;
+    if (!document.activeElement?.closest('#vision-custom-fields')) {
+      renderVisionCustom();
+    }
+
+  } else if (key === 'projects') {
+    projects = value;
+    if (!document.activeElement?.closest('#tab-projects')) {
+      renderProjects();
+    }
+
+  } else if (key === 'mind') {
+    mind = value;
+    if (!document.activeElement?.closest('#tab-mind')) {
+      renderMind();
+    }
+
+  } else if (key === 'sessions') {
+    sessions = value;
+    renderSessions();
+  }
+}
+
+// =============================================================================
+// SUPABASE SAVE
+// =============================================================================
+async function saveData(key, value) {
+  activeSaves++;
+  setSaving(true);
+  try {
+    const { error } = await db
+      .from('tracker_data')
+      .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+    if (error) throw error;
+  } catch (err) {
+    console.error('Save error:', err);
+    showToast('Save failed. Please refresh.');
+  } finally {
+    activeSaves--;
+    if (activeSaves === 0) setSaving(false);
+  }
+}
+
+function setSaving(on) {
+  document.getElementById('saving-indicator').classList.toggle('show', on);
+}
+
+// =============================================================================
+// TOAST
+// =============================================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// =============================================================================
+// EXPORT / IMPORT
+// =============================================================================
+function exportData() {
+  const vision = {
+    belief:   document.getElementById('v-belief').value,
+    becoming: document.getElementById('v-becoming').value,
+    yes:      document.getElementById('v-yes').value,
+    no:       document.getElementById('v-no').value,
+    legacy:   document.getElementById('v-legacy').value,
+  };
+  const data = { exportedAt: new Date().toISOString(), vision, visionCustom, projects, mind, sessions };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `kim-raimondo-tracker-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Data exported.');
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!confirm('This will replace all current data with the imported file. Continue?')) return;
+      const saves = [];
+      if (data.vision) {
+        const v = data.vision;
+        document.getElementById('v-belief').value   = v.belief   || '';
+        document.getElementById('v-becoming').value = v.becoming || '';
+        document.getElementById('v-yes').value      = v.yes      || '';
+        document.getElementById('v-no').value       = v.no       || '';
+        document.getElementById('v-legacy').value   = v.legacy   || '';
+        saves.push(saveData('vision', v));
+      }
+      if (data.visionCustom) {
+        visionCustom = data.visionCustom;
+        renderVisionCustom();
+        saves.push(saveData('vision_custom', visionCustom));
+      }
+      if (data.projects) {
+        projects = data.projects;
+        renderProjects();
+        saves.push(saveData('projects', projects));
+      }
+      if (data.mind) {
+        mind = data.mind;
+        renderMind();
+        saves.push(saveData('mind', mind));
+      }
+      if (data.sessions) {
+        sessions = data.sessions;
+        renderSessions();
+        saves.push(saveData('sessions', sessions));
+      }
+      await Promise.all(saves);
+      showToast('Data imported.');
+    } catch (err) {
+      alert("Something went wrong reading that file. Make sure it's a valid export.");
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// =============================================================================
+// TABS
+// =============================================================================
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) =>
+    b.classList.toggle('active', ['vision','projects','mind','sessions'][i] === id));
+  document.querySelectorAll('.tab-content').forEach(c =>
+    c.classList.toggle('active', c.id === 'tab-' + id));
+}
+
+// =============================================================================
+// VISION
+// =============================================================================
+function saveVision() {
+  clearTimeout(visionDebounceTimer);
+  visionDebounceTimer = setTimeout(() => {
+    saveData('vision', {
+      belief:   document.getElementById('v-belief').value,
+      becoming: document.getElementById('v-becoming').value,
+      yes:      document.getElementById('v-yes').value,
+      no:       document.getElementById('v-no').value,
+      legacy:   document.getElementById('v-legacy').value,
+    });
+  }, 800);
+}
+
+function renderVisionCustom() {
+  const container = document.getElementById('vision-custom-fields');
+  container.innerHTML = '';
+  visionCustom.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'vision-custom-field';
+    div.innerHTML = `
+      <button class="btn-ghost" onclick="deleteVisionField('${f.id}')" style="position:absolute;top:10px;right:10px;">×</button>
+      <input class="field-label-editable" value="${esc(f.label)}" placeholder="Field name..." onchange="updateVisionField('${f.id}','label',this.value)">
+      ${f.hint ? `<p class="field-hint">${esc(f.hint)}</p>` : ''}
+      <textarea rows="3" placeholder="..." oninput="updateVisionField('${f.id}','value',this.value)">${esc(f.value||'')}</textarea>`;
+    container.appendChild(div);
+  });
+}
+
+function showAddVisionField() {
+  const f = document.getElementById('add-vision-form');
+  f.style.display = 'flex';
+  f.style.flexDirection = 'column';
+  document.getElementById('new-vision-label').focus();
+}
+
+function addVisionField() {
+  const label = document.getElementById('new-vision-label').value.trim();
+  if (!label) return;
+  const hint = document.getElementById('new-vision-hint').value.trim();
+  visionCustom.push({ id: Date.now().toString(), label, hint, value: '' });
+  saveData('vision_custom', visionCustom);
+  document.getElementById('new-vision-label').value = '';
+  document.getElementById('new-vision-hint').value  = '';
+  document.getElementById('add-vision-form').style.display = 'none';
+  renderVisionCustom();
+}
+
+function updateVisionField(id, key, val) {
+  visionCustom = visionCustom.map(f => f.id === id ? { ...f, [key]: val } : f);
+  if (key === 'label') {
+    saveData('vision_custom', visionCustom);
+    renderVisionCustom();
+  } else {
+    clearTimeout(customFieldDebounceTimers.get(id));
+    customFieldDebounceTimers.set(id, setTimeout(() => saveData('vision_custom', visionCustom), 800));
+  }
+}
+
+function deleteVisionField(id) {
+  visionCustom = visionCustom.filter(f => f.id !== id);
+  saveData('vision_custom', visionCustom);
+  renderVisionCustom();
+}
+
+// =============================================================================
+// PROJECTS
+// =============================================================================
+function renderProjects() {
+  const list = document.getElementById('projects-list');
+  list.innerHTML = '';
+  projects.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    const priOpts = PRIORITY_OPTS.map(o => `<option${o===p.priority?' selected':''}>${o}</option>`).join('');
+    const milestonesHtml = p.milestones.map(m => {
+      const sOpts = STATUS_OPTS.map(o => `<option${o===m.status?' selected':''}>${o}</option>`).join('');
+      return `<div class="milestone-row">
+        <input class="milestone-input" value="${esc(m.text)}" placeholder="Milestone..." onchange="updateMilestone('${p.id}','${m.id}','text',this.value)">
+        <input type="date" value="${m.dueDate||''}" onchange="updateMilestone('${p.id}','${m.id}','dueDate',this.value)" style="border:1px solid var(--border);border-radius:var(--radius-sm);background:transparent;font-size:12px;color:var(--text-muted);padding:3px 6px;font-family:var(--font-sans);outline:none;width:100%">
+        <select class="status-badge ${STATUS_CLASSES[m.status]||'status-not-started'}" onchange="updateMilestoneStatus('${p.id}','${m.id}',this.value,this)">${sOpts}</select>
+        <button class="btn-ghost" onclick="deleteMilestone('${p.id}','${m.id}')">×</button>
+      </div>`;
+    }).join('');
+    card.innerHTML = `
+      <div class="project-header">
+        <div class="priority-badge"><select onchange="updateProject('${p.id}','priority',this.value)">${priOpts}</select></div>
+        <div style="flex:1;min-width:0">
+          <input class="project-title-input" value="${esc(p.name)}" onchange="updateProject('${p.id}','name',this.value)">
+          <input class="project-notes-input" value="${esc(p.notes)}" placeholder="Notes..." onchange="updateProject('${p.id}','notes',this.value)">
+        </div>
+        <button class="btn-ghost" onclick="deleteProject('${p.id}')">×</button>
+      </div>
+      ${milestonesHtml}
+      <div class="milestone-add-row">
+        <input class="milestone-add-input" id="m-add-${p.id}" placeholder="Add a milestone..." onkeydown="if(event.key==='Enter')addMilestone('${p.id}')">
+        <button class="btn-add-inline" onclick="addMilestone('${p.id}')">+ Add</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function updateProject(id, key, val) {
+  projects = projects.map(p => p.id === id ? { ...p, [key]: val } : p);
+  saveData('projects', projects);
+}
+
+function deleteProject(id) {
+  if (confirm('Remove this project?')) {
+    projects = projects.filter(p => p.id !== id);
+    saveData('projects', projects);
+    renderProjects();
+  }
+}
+
+function updateMilestone(pid, mid, key, val) {
+  projects = projects.map(p => p.id !== pid ? p : {
+    ...p,
+    milestones: p.milestones.map(m => m.id === mid ? { ...m, [key]: val } : m)
+  });
+  saveData('projects', projects);
+}
+
+function updateMilestoneStatus(pid, mid, val, sel) {
+  updateMilestone(pid, mid, 'status', val);
+  sel.className = 'status-badge ' + (STATUS_CLASSES[val] || 'status-not-started');
+}
+
+function deleteMilestone(pid, mid) {
+  projects = projects.map(p => p.id !== pid ? p : {
+    ...p,
+    milestones: p.milestones.filter(m => m.id !== mid)
+  });
+  saveData('projects', projects);
+  renderProjects();
+}
+
+function addMilestone(pid) {
+  const inp  = document.getElementById('m-add-' + pid);
+  const text = inp.value.trim();
+  if (!text) return;
+  projects = projects.map(p => p.id !== pid ? p : {
+    ...p,
+    milestones: [...p.milestones, { id: Date.now().toString(), text, dueDate: '', status: 'Not Started' }]
+  });
+  saveData('projects', projects);
+  inp.value = '';
+  renderProjects();
+}
+
+function showAddProject() {
+  const f = document.getElementById('add-project-form');
+  f.style.display = 'flex';
+  f.style.flexDirection = 'column';
+  document.getElementById('new-proj-name').focus();
+}
+
+function addProject() {
+  const name = document.getElementById('new-proj-name').value.trim();
+  if (!name) return;
+  const pri = document.getElementById('new-pri').value;
+  projects.push({ id: Date.now().toString(), priority: pri, name, notes: '', milestones: [] });
+  saveData('projects', projects);
+  document.getElementById('new-proj-name').value = '';
+  document.getElementById('add-project-form').style.display = 'none';
+  renderProjects();
+}
+
+// =============================================================================
+// ON MY MIND
+// =============================================================================
+function renderMind() {
+  const list = document.getElementById('mind-list');
+  if (!mind.length) { list.innerHTML = '<p class="empty-state">Nothing yet.</p>'; return; }
+  list.innerHTML = mind.map(m =>
+    `<div class="mind-item">
+      <div class="mind-item-body">
+        <div class="mind-item-text">${esc(m.text)}</div>
+        <div class="mind-item-date">${new Date(m.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <button class="btn-ghost" onclick="deleteMind('${m.id}')">×</button>
+    </div>`
+  ).join('');
+}
+
+function addMind() {
+  const inp  = document.getElementById('mind-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  mind.unshift({ id: Date.now().toString(), text, addedAt: new Date().toISOString() });
+  saveData('mind', mind);
+  inp.value = '';
+  renderMind();
+}
+
+function deleteMind(id) {
+  mind = mind.filter(m => m.id !== id);
+  saveData('mind', mind);
+  renderMind();
+}
+
+// =============================================================================
+// SESSION LOG
+// =============================================================================
+function renderSessions() {
+  const list = document.getElementById('sessions-list');
+  if (!sessions.length) {
+    list.innerHTML = '<p class="empty-state">No sessions yet. First one is April 1st.</p>';
+    return;
+  }
+  list.innerHTML = sessions.map(s => `
+    <div class="session-card">
+      <div class="session-card-header" onclick="toggleSession('${s.id}')">
+        <span class="session-card-title">${new Date(s.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})}</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-ghost" onclick="event.stopPropagation();deleteSession('${s.id}')">×</button>
+          <span class="chevron" id="chev-${s.id}">▼</span>
+        </div>
+      </div>
+      <div class="session-card-body" id="sbody-${s.id}">
+        ${s.covered     ? `<div class="session-field"><div class="session-field-label">What we covered</div><div class="session-field-value">${esc(s.covered)}</div></div>`     : ''}
+        ${s.commitments ? `<div class="session-field"><div class="session-field-label">Commitments</div><div class="session-field-value">${esc(s.commitments)}</div></div>` : ''}
+        ${s.next        ? `<div class="session-field"><div class="session-field-label">Next steps</div><div class="session-field-value">${esc(s.next)}</div></div>`           : ''}
+      </div>
+    </div>`
+  ).join('');
+}
+
+function toggleSession(id) {
+  const b = document.getElementById('sbody-'  + id);
+  const c = document.getElementById('chev-' + id);
+  b.classList.toggle('open');
+  c.textContent = b.classList.contains('open') ? '▲' : '▼';
+}
+
+function deleteSession(id) {
+  if (confirm('Remove this session log?')) {
+    sessions = sessions.filter(s => s.id !== id);
+    saveData('sessions', sessions);
+    renderSessions();
+  }
+}
+
+function showSessionForm() {
+  const f = document.getElementById('session-form-container');
+  f.style.display = f.style.display === 'none' ? 'flex' : 'none';
+  if (f.style.display === 'flex') {
+    f.style.flexDirection = 'column';
+    document.getElementById('s-date').value = new Date().toISOString().split('T')[0];
+  }
+}
+
+function saveSession() {
+  const covered = document.getElementById('s-covered').value.trim();
+  if (!covered) return;
+  sessions.unshift({
+    id:          Date.now().toString(),
+    date:        document.getElementById('s-date').value,
+    covered,
+    commitments: document.getElementById('s-commitments').value,
+    next:        document.getElementById('s-next').value,
+  });
+  saveData('sessions', sessions);
+  document.getElementById('session-form-container').style.display = 'none';
+  document.getElementById('s-covered').value     = '';
+  document.getElementById('s-commitments').value = '';
+  document.getElementById('s-next').value        = '';
+  renderSessions();
+}
+
+// =============================================================================
+// HELPERS
+// =============================================================================
+function esc(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+// =============================================================================
+// BOOT
+// =============================================================================
+init();
+</script>
+</body>
+</html>
