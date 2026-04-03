@@ -88,6 +88,11 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 .mind-item-text { font-size: 14px; color: var(--text); line-height: 1.5; }
 .mind-item-date { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
 .empty-state { font-size: 13px; color: var(--text-hint); text-align: center; padding: 3rem 0; }
+.win-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid #c9a84c; border-radius: var(--radius-md); margin-bottom: 8px; }
+.win-icon { font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+.win-item-body { flex: 1; }
+.win-item-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+.win-item-date { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
 .session-log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
 .session-form { background: var(--surface); border: 1px solid var(--brand); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 12px; }
 .session-form label { font-size: 12px; font-weight: 500; color: var(--text-muted); display: block; margin-bottom: 4px; }
@@ -134,6 +139,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
     <button class="tab-btn" onclick="switchTab('projects')">Projects</button>
     <button class="tab-btn" onclick="switchTab('mind')">On My Mind</button>
     <button class="tab-btn" onclick="switchTab('sessions')">Session Log</button>
+    <button class="tab-btn" onclick="switchTab('wins')">Wins</button>
   </div>
 
   <!-- VISION -->
@@ -238,6 +244,15 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
       </div>
     </div>
     <div id="sessions-list"></div>
+  <!-- WINS -->
+  <div id="tab-wins" class="tab-content">
+    <p class="hint">The proof that it's working.</p>
+    <div class="mind-input-row">
+      <input type="text" id="win-input" placeholder="What happened?" onkeydown="if(event.key==='Enter')addWin()">
+      <button class="btn-primary" onclick="addWin()">Add</button>
+    </div>
+    <div id="wins-list"></div>
+  </div>
   </div>
 </div>
 
@@ -282,6 +297,7 @@ let projects       = [];
 let mind           = [];
 let sessions       = [];
 let visionCustom   = [];
+let wins           = [];
 
 let visionDebounceTimer = null;
 const customFieldDebounceTimers = new Map();
@@ -341,6 +357,11 @@ async function loadAll() {
   // Sessions
   sessions = map['sessions'] || [];
   renderSessions();
+
+
+  // Wins
+  wins = map['wins'] || [];
+  renderWins();
 }
 
 // =============================================================================
@@ -390,6 +411,13 @@ function handleRemote(payload) {
   } else if (key === 'sessions') {
     sessions = value;
     renderSessions();
+ 
+
+  } else if (key === 'wins') {
+    wins = value;
+    if (!document.activeElement?.closest('#tab-wins')) {
+      renderWins();
+    }
   }
 }
 
@@ -438,7 +466,7 @@ function exportData() {
     no:       document.getElementById('v-no').value,
     legacy:   document.getElementById('v-legacy').value,
   };
-  const data = { exportedAt: new Date().toISOString(), vision, visionCustom, projects, mind, sessions };
+  const data = { exportedAt: new Date().toISOString(), vision, visionCustom, projects, mind, sessions, wins };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
@@ -487,6 +515,11 @@ function importData(input) {
         renderSessions();
         saves.push(saveData('sessions', sessions));
       }
+      if (data.wins) {
+        wins = data.wins;
+        renderWins();
+        saves.push(saveData('wins', wins));
+      }
       await Promise.all(saves);
       showToast('Data imported.');
     } catch (err) {
@@ -502,7 +535,7 @@ function importData(input) {
 // =============================================================================
 function switchTab(id) {
   document.querySelectorAll('.tab-btn').forEach((b, i) =>
-    b.classList.toggle('active', ['vision','projects','mind','sessions'][i] === id));
+    b.classList.toggle('active', ['vision','projects','mind','sessions','wins'][i] === id));
   document.querySelectorAll('.tab-content').forEach(c =>
     c.classList.toggle('active', c.id === 'tab-' + id));
 }
@@ -780,6 +813,39 @@ function saveSession() {
 }
 
 // =============================================================================
+// WINS
+// =============================================================================
+function renderWins() {
+  const list = document.getElementById('wins-list');
+  if (!wins.length) { list.innerHTML = '<p class="empty-state">No wins logged yet. Add the first one.</p>'; return; }
+  list.innerHTML = wins.map(w =>
+    `<div class="win-item">
+      <div class="win-icon">★</div>
+      <div class="win-item-body">
+        <div class="win-item-text">${esc(w.text)}</div>
+        <div class="win-item-date">${new Date(w.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+      </div>
+      <button class="btn-ghost" onclick="deleteWin('${w.id}')">×</button>
+    </div>`
+  ).join('');
+}
+
+function addWin() {
+  const inp  = document.getElementById('win-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  wins.unshift({ id: Date.now().toString(), text, addedAt: new Date().toISOString() });
+  saveData('wins', wins);
+  inp.value = '';
+  renderWins();
+}
+
+function deleteWin(id) {
+  wins = wins.filter(w => w.id !== id);
+  saveData('wins', wins);
+  renderWins();
+}
+
 // HELPERS
 // =============================================================================
 function esc(s) {
