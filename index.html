@@ -94,14 +94,13 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 .mind-item-text { font-size: 14px; color: var(--text); line-height: 1.5; }
 .mind-item-date { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
 .empty-state { font-size: 13px; color: var(--text-hint); text-align: center; padding: 3rem 0; }
-.comment-stats-row { display: flex; gap: 12px; margin-bottom: 20px; }
-.comment-stat-box { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; text-align: center; }
-.comment-stat-label { font-size: 10px; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-.comment-stat-num { font-size: 40px; font-family: var(--font-serif); color: var(--text); font-weight: 400; line-height: 1; }
-.comment-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 8px; }
-.comment-item-body { flex: 1; }
-.comment-item-text { font-size: 14px; color: var(--text); line-height: 1.5; }
-.comment-item-date { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
+.comment-stats-row { display: flex; gap: 12px; margin-bottom: 24px; }
+.comment-stat-box { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 20px; text-align: center; }
+.comment-stat-label { font-size: 10px; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.comment-stat-num { font-size: 52px; font-family: var(--font-serif); color: var(--text); font-weight: 400; line-height: 1; }
+.comment-tap-row { display: flex; align-items: center; gap: 16px; justify-content: center; margin-top: 8px; }
+.comment-tap-btn { font-size: 18px; padding: 12px 40px; letter-spacing: 0.03em; }
+.comment-undo-btn { font-size: 13px; color: var(--text-hint); }
 .win-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid #c9a84c; border-radius: var(--radius-md); margin-bottom: 8px; }
 .win-icon { font-size: 15px; flex-shrink: 0; margin-top: 2px; }
 .win-item-body { flex: 1; }
@@ -274,10 +273,6 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
   <!-- COMMENTS -->
   <div id="tab-comments" class="tab-content">
     <p class="hint">Your voice in other people's conversations.</p>
-    <div class="mind-input-row">
-      <input type="text" id="comment-input" placeholder="What did you comment on?" onkeydown="if(event.key==='Enter')addComment()">
-      <button class="btn-primary" onclick="addComment()">Log</button>
-    </div>
     <div class="comment-stats-row">
       <div class="comment-stat-box">
         <div class="comment-stat-label">This Week</div>
@@ -288,7 +283,10 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
         <div class="comment-stat-num" id="comments-all-time">0</div>
       </div>
     </div>
-    <div id="comments-list"></div>
+    <div class="comment-tap-row">
+      <button class="btn-primary comment-tap-btn" onclick="addComment()">+ 1</button>
+      <button class="btn-ghost comment-undo-btn" onclick="undoComment()">undo</button>
+    </div>
   </div>
 </div>
 
@@ -978,32 +976,17 @@ function renderComments() {
   const atEl = document.getElementById('comments-all-time');
   if (twEl) twEl.textContent = thisWeek;
   if (atEl) atEl.textContent = allTime;
-  const list = document.getElementById('comments-list');
-  if (!list) return;
-  if (!comments.length) { list.innerHTML = '<p class="empty-state">No comments logged yet.</p>'; return; }
-  list.innerHTML = comments.map(c =>
-    `<div class="comment-item">
-      <div class="comment-item-body">
-        <div class="comment-item-text">${esc(c.text)}</div>
-        <div class="comment-item-date">${new Date(c.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
-      </div>
-      <button class="btn-ghost" onclick="deleteComment(\'${c.id}\')">×</button>
-    </div>`
-  ).join('');
 }
 
 function addComment() {
-  const inp  = document.getElementById('comment-input');
-  const text = inp.value.trim();
-  if (!text) return;
-  comments.unshift({ id: Date.now().toString(), text, addedAt: new Date().toISOString() });
+  comments.unshift({ id: Date.now().toString(), addedAt: new Date().toISOString() });
   saveData('comments', comments);
-  inp.value = '';
   renderComments();
 }
 
-function deleteComment(id) {
-  comments = comments.filter(c => c.id !== id);
+function undoComment() {
+  if (!comments.length) return;
+  comments.shift();
   saveData('comments', comments);
   renderComments();
 }
