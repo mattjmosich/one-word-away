@@ -997,7 +997,7 @@ function renderComments() {
     buckets[key] = (buckets[key] || 0) + 1;
   });
   const rows = Object.keys(buckets).sort((a, b) => b - a).map(key => {
-    const label = new Date(+key).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const label = new Date(+key).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return `<div class="comment-weekly-row">
       <span class="comment-weekly-label">Week of ${label}</span>
       <span class="comment-weekly-count">${buckets[key]}</span>
