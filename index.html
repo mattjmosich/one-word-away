@@ -80,6 +80,12 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 .add-project-form { background: var(--surface); border: 1px solid var(--brand); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
 .add-project-form .row { display: flex; gap: 8px; align-items: center; }
 .add-project-form .row select { background: var(--brand); color: #fff; border: none; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); flex-shrink: 0; }
+.sort-toggle-btn { font-size: 12px; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; font-family: var(--font-sans); margin-bottom: 14px; }
+.sort-toggle-btn:hover { color: var(--text); border-color: var(--text-muted); }
+.drag-handle { cursor: grab; color: var(--text-hint); font-size: 16px; padding: 0 6px 0 0; flex-shrink: 0; user-select: none; }
+.drag-handle:active { cursor: grabbing; }
+.project-card.dragging { opacity: 0.35; }
+.project-card.drag-over { outline: 2px solid var(--brand); outline-offset: -2px; }
 .form-btns { display: flex; gap: 8px; justify-content: flex-end; }
 .mind-input-row { display: flex; gap: 8px; margin-bottom: 1rem; }
 .mind-input-row input { flex: 1; }
@@ -188,6 +194,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 
   <!-- PROJECTS -->
   <div id="tab-projects" class="tab-content">
+    <button class="sort-toggle-btn" id="sort-toggle-btn" onclick="toggleProjectSort()">⇅ Manual order</button>
     <div id="projects-list"></div>
     <div id="add-project-form" style="display:none" class="add-project-form">
       <div class="row">
@@ -294,6 +301,7 @@ const DEFAULT_PROJECTS = [
 
 let db             = null;
 let projects       = [];
+let projectSortMode = 'auto';
 let mind           = [];
 let sessions       = [];
 let visionCustom   = [];
@@ -348,6 +356,7 @@ async function loadAll() {
     projects = DEFAULT_PROJECTS;
     saveData('projects', projects);
   }
+  projectSortMode = map['projectSortMode'] || 'auto';
   renderProjects();
 
   // Mind
@@ -418,6 +427,9 @@ function handleRemote(payload) {
     if (!document.activeElement?.closest('#tab-wins')) {
       renderWins();
     }
+  } else if (key === 'projectSortMode') {
+    projectSortMode = value;
+    renderProjects();
   }
 }
 
@@ -466,7 +478,7 @@ function exportData() {
     no:       document.getElementById('v-no').value,
     legacy:   document.getElementById('v-legacy').value,
   };
-  const data = { exportedAt: new Date().toISOString(), vision, visionCustom, projects, mind, sessions, wins };
+  const data = { exportedAt: new Date().toISOString(), vision, visionCustom, projects, projectSortMode, mind, sessions, wins };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
@@ -502,8 +514,10 @@ function importData(input) {
       }
       if (data.projects) {
         projects = data.projects;
+        if (data.projectSortMode) projectSortMode = data.projectSortMode;
         renderProjects();
         saves.push(saveData('projects', projects));
+        if (data.projectSortMode) saves.push(saveData('projectSortMode', projectSortMode));
       }
       if (data.mind) {
         mind = data.mind;
@@ -613,9 +627,43 @@ function deleteVisionField(id) {
 function renderProjects() {
   const list = document.getElementById('projects-list');
   list.innerHTML = '';
-  projects.forEach(p => {
+  updateSortToggleBtn();
+  const PORDER = {'A+':0,'A':1,'A-':2,'B+':3,'B':4,'B-':5,'C':6};
+  const display = projectSortMode === 'auto'
+    ? [...projects].sort((a,b) => (PORDER[a.priority]??99)-(PORDER[b.priority]??99))
+    : projects;
+  display.forEach(p => {
     const card = document.createElement('div');
     card.className = 'project-card';
+    card.dataset.id = p.id;
+    if (projectSortMode === 'manual') {
+      card.draggable = true;
+      card.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', p.id);
+        setTimeout(() => card.classList.add('dragging'), 0);
+      });
+      card.addEventListener('dragend', () => card.classList.remove('dragging'));
+      card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
+      card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+      card.addEventListener('drop', e => {
+        e.preventDefault();
+        card.classList.remove('drag-over');
+        const draggedId = e.dataTransfer.getData('text/plain');
+        if (draggedId === p.id) return;
+        const from = projects.findIndex(x => x.id === draggedId);
+        const to   = projects.findIndex(x => x.id === p.id);
+        if (from < 0 || to < 0) return;
+        const arr = [...projects];
+        const [item] = arr.splice(from, 1);
+        arr.splice(to, 0, item);
+        projects = arr;
+        saveData('projects', projects);
+        renderProjects();
+      });
+    }
+    const dragHandleHtml = projectSortMode === 'manual'
+      ? '<div class="drag-handle" title="Drag to reorder">⠿</div>'
+      : '';
     const priOpts = PRIORITY_OPTS.map(o => `<option${o===p.priority?' selected':''}>${o}</option>`).join('');
     const milestonesHtml = p.milestones.map(m => {
       const sOpts = STATUS_OPTS.map(o => `<option${o===m.status?' selected':''}>${o}</option>`).join('');
@@ -628,7 +676,7 @@ function renderProjects() {
     }).join('');
     card.innerHTML = `
       <div class="project-header">
-        <div class="priority-badge"><select onchange="updateProject('${p.id}','priority',this.value)">${priOpts}</select></div>
+        ${dragHandleHtml}<div class="priority-badge"><select onchange="updateProject('${p.id}','priority',this.value)">${priOpts}</select></div>
         <div style="flex:1;min-width:0">
           <input class="project-title-input" value="${esc(p.name)}" onchange="updateProject('${p.id}','name',this.value)">
           <input class="project-notes-input" value="${esc(p.notes)}" placeholder="Notes..." onchange="updateProject('${p.id}','notes',this.value)">
@@ -642,6 +690,25 @@ function renderProjects() {
       </div>`;
     list.appendChild(card);
   });
+}
+
+function toggleProjectSort() {
+  if (projectSortMode === 'auto') {
+    const ord = {'A+':0,'A':1,'A-':2,'B+':3,'B':4,'B-':5,'C':6};
+    projects = [...projects].sort((a,b) => (ord[a.priority]??99)-(ord[b.priority]??99));
+    projectSortMode = 'manual';
+  } else {
+    projectSortMode = 'auto';
+  }
+  saveData('projectSortMode', projectSortMode);
+  saveData('projects', projects);
+  renderProjects();
+}
+
+function updateSortToggleBtn() {
+  const btn = document.getElementById('sort-toggle-btn');
+  if (!btn) return;
+  btn.textContent = projectSortMode === 'auto' ? '⇅ Manual order' : '⇅ Auto-sort';
 }
 
 function updateProject(id, key, val) {
