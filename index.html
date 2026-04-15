@@ -101,6 +101,11 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 .comment-tap-row { display: flex; align-items: center; gap: 16px; justify-content: center; margin-top: 8px; }
 .comment-tap-btn { font-size: 18px; padding: 12px 40px; letter-spacing: 0.03em; }
 .comment-undo-btn { font-size: 13px; color: var(--text-hint); }
+.comment-weekly { margin-top: 32px; }
+.comment-weekly-heading { font-size: 10px; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.comment-weekly-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 6px; }
+.comment-weekly-label { font-size: 13px; color: var(--text-muted); }
+.comment-weekly-count { font-size: 15px; font-family: var(--font-serif); color: var(--text); }
 .win-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid #c9a84c; border-radius: var(--radius-md); margin-bottom: 8px; }
 .win-icon { font-size: 15px; flex-shrink: 0; margin-top: 2px; }
 .win-item-body { flex: 1; }
@@ -287,6 +292,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
       <button class="btn-primary comment-tap-btn" onclick="addComment()">+ 1</button>
       <button class="btn-ghost comment-undo-btn" onclick="undoComment()">undo</button>
     </div>
+    <div class="comment-weekly" id="comments-weekly"></div>
   </div>
 </div>
 
@@ -976,6 +982,28 @@ function renderComments() {
   const atEl = document.getElementById('comments-all-time');
   if (twEl) twEl.textContent = thisWeek;
   if (atEl) atEl.textContent = allTime;
+
+  // Weekly breakdown
+  const weekly = document.getElementById('comments-weekly');
+  if (!weekly || !comments.length) { if (weekly) weekly.innerHTML = ''; return; }
+  const buckets = {};
+  comments.forEach(c => {
+    const d = new Date(c.addedAt);
+    const day = d.getDay();
+    const mon = new Date(d);
+    mon.setDate(d.getDate() - day + (day === 0 ? -6 : 1));
+    mon.setHours(0, 0, 0, 0);
+    const key = mon.getTime();
+    buckets[key] = (buckets[key] || 0) + 1;
+  });
+  const rows = Object.keys(buckets).sort((a, b) => b - a).map(key => {
+    const label = new Date(+key).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return `<div class="comment-weekly-row">
+      <span class="comment-weekly-label">Week of ${label}</span>
+      <span class="comment-weekly-count">${buckets[key]}</span>
+    </div>`;
+  }).join('');
+  weekly.innerHTML = `<div class="comment-weekly-heading">By week</div>${rows}`;
 }
 
 function addComment() {
