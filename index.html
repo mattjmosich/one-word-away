@@ -80,9 +80,9 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 .add-project-form { background: var(--surface); border: 1px solid var(--brand); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
 .add-project-form .row { display: flex; gap: 8px; align-items: center; }
 .add-project-form .row select { background: var(--brand); color: #fff; border: none; border-radius: var(--radius-sm); padding: 6px 10px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); flex-shrink: 0; }
-.sort-toggle-btn { font-size: 12px; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; font-family: var(--font-sans); margin-bottom: 14px; display: inline-flex; align-items: center; gap: 4px; }
+.sort-toggle-btn { font-size: 12px; color: var(--text-muted); background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; font-family: var(--font-sans); margin-bottom: 14px; }
 .sort-toggle-btn:hover { color: var(--text); border-color: var(--text-muted); }
-.drag-handle { cursor: grab; color: var(--text-hint); font-size: 16px; padding: 0 6px 0 0; flex-shrink: 0; user-select: none; display: inline-flex; align-items: center; }
+.drag-handle { cursor: grab; color: var(--text-hint); font-size: 16px; padding: 0 6px 0 0; flex-shrink: 0; user-select: none; }
 .drag-handle:active { cursor: grabbing; }
 .project-card.dragging { opacity: 0.35; }
 .project-card.drag-over { outline: 2px solid var(--brand); outline-offset: -2px; }
@@ -818,48 +818,8 @@ function renderProjects() {
   const list = document.getElementById('projects-list');
   list.innerHTML = '';
   updateSortToggleBtn();
-  const PORDER = {'A+':0,'A':1,'A-':2,'B+':3,'B':4,'B-':5,'C':6};
-  const display = projectSortMode === 'auto'
-    ? [...projects].sort((a,b) => (PORDER[a.priority]??99)-(PORDER[b.priority]??99))
-    : projects;
-  display.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'project-card';
-    card.dataset.id = p.id;
-    if (projectSortMode === 'manual') {
-      card.draggable = true;
-      card.addEventListener('dragstart', e => {
-        e.dataTransfer.setData('text/plain', p.id);
-        setTimeout(() => card.classList.add('dragging'), 0);
-      });
-      card.addEventListener('dragend', () => card.classList.remove('dragging'));
-      card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
-      card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
-      card.addEventListener('drop', e => {
-        e.preventDefault();
-        card.classList.remove('drag-over');
-        const draggedId = e.dataTransfer.getData('text/plain');
-        if (draggedId === p.id) return;
-        const from = projects.findIndex(x => x.id === draggedId);
-        const to   = projects.findIndex(x => x.id === p.id);
-        if (from < 0 || to < 0) return;
-        const arr = [...projects];
-        const [item] = arr.splice(from, 1);
-        arr.splice(to, 0, item);
-        projects = arr;
-        saveData('projects', projects);
-        renderProjects();
-      });
-    }
-    const dragHandleHtml = projectSortMode === 'manual'
-      ? `<div class="drag-handle" title="Drag to reorder">${ICON_DRAG}</div>`
-      : '';
-    const priOpts = PRIORITY_OPTS.map(o => o<option${o===p.priority?' selected':''}>${o}</option>`).join('');
-    const milestonesHtml = p.milestones.map(m => {
-      const sOpts = STATUS_OPTS.map(o => o<option${o===m.status?' selected':''}>${o}</option>`).join('');
-      return `<div class="milestone-row">
-        <input class="milestone-input" value="${esc(m.text)}" placeholder="Milestone..." onchange="updateMilestone('${p.id}','${m.id}','text',this.value)">
-        <input type="date" value="${m.dueDate||''}" onchange="updateMilestone('${p.id}','${m.id}','dueDate',this.value)" style="border:1px solid var(--border);border-radius:var(--radius-sm);background:transparent;font-size:12px;color:var(--text-muted);padding:3px 6px;font-family:var(--font-sans);outline:none;width:100%">
+  const POPDEPôì¬èÀ°èÄ°´èÈ°¬èÌ°èÐ°´èÔ°èÙôì(½¹ÍÐ¥ÍÁ±äôÁÉ½©ÑM½ÉÑ5½ôôôÕÑ¼(ül¸¸¹ÁÉ½©ÑÍt¹Í½ÉÐ ¡±¤ôø¡A=Im¹ÁÉ¥½É¥Ñåtüüää¤´¡A=IIm¹ÁÉ¥½É¥Ñåtüüää¤¤(èÁÉ½©ÑÌì(¥ÍÁ±ä¹½É ¡Àôøì(½¹ÍÐÉô½Õµ¹Ð¹ÉÑ±µ¹Ð ¥Ø¤ì(É¹±ÍÍ9µôÁÉ½©ÐµÉì(É¹ÑÍÐ¹¥ôÀ¹¥ì(¥¡ÁÉ½©ÑM½ÉÑ5½ôôôµ¹Õ°¤ì(É¹É±ôÑÉÕì(É¹Ù¹Ñ1¥ÍÑ¹È ÉÍÑÉÐ°ôøì(¹ÑQÉ¹ÍÈ¹ÍÑÑ ÑáÐ½Á±¥¸°À¹¥¤ì(ÍÑQ¥µ½ÕÐ  ¤ôøÉ¹±ÍÍ1¥ÍÐ¹ É¥¹¤°À¤ì(ô¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É¹° ¤ôøÉ¹±ÍÍ1¥ÍÐ¹Éµ½Ù É¥¹¤¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É½ÙÈ°ôøì¹ÁÉÙ¹ÑÕ±Ð ¤ìÉ¹±ÍÍ1¥ÍÐ¹ Éµ½ÙÈ¤ìô¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É±Ù° ¤ôøÉ¹±ÍÍ1¥ÍÐ¹Éµ½Ù Éµ½ÙÈ¤¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É½À°ôøì(¹ÁÉÙ¹ÑÕ±Ð ¤ì(É¹±ÍÍ1¥ÍÐ¹Éµ½Ù Éµ½ÙÈ¤ì(½¹ÍÐÉ%ô¹ÑQÉ¹ÍÈ¹ÑÑ ÑáÐ½Á±¥¸¤ì(¥¡É%ôôôÀ¹¥¤ÉÑÕÉ¸ì(½¹ÍÐÉ½´ôÁÉ½©ÑÌ¹¥¹%¹à¡àôøà¹¥ôôôÉ%¤ì(½¹ÍÐÑ¼ôÁÉ½©ÑÌ¹¥¹%¹à¡àôøà¹¥ôôôÀ¹¥¤ì(¥¡É½´ðÀñðÑ¼ðÀ¤ÉÑÕÉ¸ì(½¹ÍÐÉÈôl¸¸¹ÁÉ½©ÑÍtì(½¹ÍÐm¥ÑµtôÉÈ¹ÍÁ±¥¡É½´°Ä¤ì(ÉÈ¹ÍÁ±¥¡Ñ¼°À°¥Ñ´¤ì(ÁÉ½©ÑÌôÉÈì(ÍÙÑ ÁÉ½©ÑÌ°ÁÉ½©ÑÌ¤ì(É¹ÉAÉ½©ÑÌ ¤ì(ô¤ì(ô(½¹ÍÐÉ!¹±!Ñµ°ôÁÉ½©ÑM½ÉÑ5½ôôôµ¹Õ°(üñ¥Ø±ÍÌôÉµ¡¹±Ñ¥Ñ±ôÉÑ¼É½ÉÈøí%
+=9}Iôð½¥Øù(èì(½¹ÍÐÁÉ¥=ÁÑÌôAI%=I%Qe}=AQL¹µÀ¡¼ôøñ½ÁÑ¥½¸í¼ôôõÀ¹ÁÉ¥½É¥ÑäüÍ±Ñèôøí½ôð½½ÁÑ¥½¸ù¤¹©½¥¸ ¤ì(½¹ÍÐµ¥±ÍÑ½¹Í!Ñµ°ôÀ¹µ¥±ÍÑ½¹Ì¹µÀ¡´ôøì(½¹ÍÐÍ=ÁÑÌôMQQUM}=AQL¹µÀ¡¼ôøñ½ÁÑ¥½¸í¼ôôõ´¹ÍÑÑÕÌüÍ±Ñèôøí½ôð½½ÁÑ¥½¸ù¤¹©½¥¸ ¤ì(ÉÑÕÉ¸ñ¥Ø±ÍÌôµ¥±ÍÑ½¹µÉ½Üø(ñ¥¹ÁÕÐ±ÍÌôµ¥±ÍÑ½¹µ¥¹ÁÕÐÙ±ÕôíÍ¡´¹ÑáÐ¥ôÁ±¡½±Èô5¥±ÍÑ½¹¸¸¸½¹¡¹ôÕÁÑ5¥±ÍÑ½¹ íÀ¹¥ô°í´¹¥ô°ÑáÐ±Ñ¡¥Ì¹Ù±Õ¤ø(ñ¥¹ÁÕÐÑåÁôÑÙ±Õôí´¹ÕÑñðô½¹¡¹ôÕÁÑ5¥±ÍÑ½¹ íÀ¹¥ô°í´¹id}','dueDate',this.value)" style="border:1px solid var(--border);border-radius:var(--radius-sm);background:transparent;font-size:12px;color:var(--text-muted);padding:3px 6px;font-family:var(--font-sans);outline:none;width:100%">
         <select class="status-badge ${STATUS_CLASSES[m.status]||'status-not-started'}" onchange="updateMilestoneStatus('${p.id}','${m.id}',this.value,this)">${sOpts}</select>
         <button class="btn-ghost" onclick="deleteMilestone('${p.id}','${m.id}')">${ICON_X}</button>
       </div>`;
@@ -977,7 +937,7 @@ function renderMind() {
     `<div class="mind-item">
       <div class="mind-item-body">
         <div class="mind-item-text">${esc(m.text)}</div>
-        <div class="mind-item-date">${new Date(m.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric''hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="mind-item-date">${new Date(m.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
       </div>
       <button class="btn-ghost" onclick="deleteMind('${m.id}')">${ICON_X}</button>
     </div>`
