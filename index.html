@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kim Raimondo â Visibility & Vision Advisory</title>
+<title>Kim Raimondo &mdash; Visibility & Vision Advisory</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -129,7 +129,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 .toast.show { opacity: 1; }
 .saving-indicator { position: fixed; bottom: 1.5rem; right: 1.5rem; font-size: 11px; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 5px 12px; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 998; }
 .saving-indicator.show { opacity: 1; }
-/* Do + Delegate â quadrant grid */
+/* Do + Delegate - quadrant grid */
 .dd-quadrant-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border-strong); border-radius: var(--radius-lg); overflow: hidden; }
 .dd-quadrant { padding: 16px; min-height: 200px; background: var(--surface); transition: background 0.15s; position: relative; }
 .dd-quadrant:nth-child(1) { border-right: 1px solid var(--border-strong); border-bottom: 1px solid var(--border-strong); }
@@ -144,7 +144,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 .dd-q-input-row .btn-primary { font-size: 12px; padding: 7px 12px; flex-shrink: 0; }
 .dd-q-list { min-height: 30px; }
 @media (max-width: 600px) { .dd-quadrant-grid { grid-template-columns: 1fr; } .dd-quadrant:nth-child(1) { border-right: none; } .dd-quadrant:nth-child(3) { border-right: none; } }
-/* dd items â shared by quadrants and minor sections */
+/* dd items - shared by quadrants and minor sections */
 .dd-item { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 5px; }
 .dd-item-draggable { cursor: grab; user-select: none; }
 .dd-item-draggable:active { cursor: grabbing; }
@@ -169,7 +169,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
     <div class="header-bar"></div>
     <div class="header-text">
       <h1>Kim Raimondo</h1>
-      <p>VISIBILITY &amp; VISION ADVISORY â MATT MOSICH</p>
+      <p>VISIBILITY &amp; VISION ADVISORY &mdash; MATT MOSICH</p>
     </div>
     <div class="header-actions">
       <button class="btn-import" onclick="document.getElementById('import-input').click()">
@@ -196,10 +196,10 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 
   <!-- VISION -->
   <div id="tab-vision" class="tab-content active">
-    <p class="hint">Know where we're going so we can map the way there.</p>
+    <p class="hint">Koow where we're going so we can map the way there.</p>
     <div class="field-group">
       <label class="field-label">The core belief</label>
-      <p class="field-hint">Underneath all of it â what's the one belief you keep coming back to?</p>
+      <p class="field-hint">Underneath all of it &mdash; what's the one belief you keep coming back to?</p>
       <textarea id="v-belief" rows="3" placeholder="..." oninput="saveVision()"></textarea>
     </div>
     <div class="field-group">
@@ -240,7 +240,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 
   <!-- PROJECTS -->
   <div id="tab-projects" class="tab-content">
-    <button class="sort-toggle-btn" id="sort-toggle-btn" onclick="toggleProjectSort()">â Manual order</button>
+    <button class="sort-toggle-btn" id="sort-toggle-btn" onclick="toggleProjectSort()">&#x21C5; Manual order</button>
     <div id="projects-list"></div>
     <div id="add-project-form" style="display:none" class="add-project-form">
       <div class="row">
@@ -330,7 +330,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 
   <!-- DO + DELEGATE -->
   <div id="tab-delegate" class="tab-content">
-    <p class="hint">Clarify what only you can do â and build a path to everything else.</p>
+    <p class="hint">Clarify what only you can do &mdash; and build a path to everything else.</p>
 
     <div class="dd-quadrant-grid">
       <!-- Top-left: Keep Doing -->
@@ -417,7 +417,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 </div>
 
 <div class="toast" id="toast"></div>
-<div class="saving-indicator" id="saving-indicator">Savingâ¦</div>
+<div class="saving-indicator" id="saving-indicator">Saving&hellip;</div>
 
 <script>
 // =============================================================================
@@ -434,7 +434,7 @@ const STATUS_CLASSES = {
 const STATUS_OPTS   = ['Not Started', 'In Progress', 'Complete', 'On Hold'];
 const PRIORITY_OPTS = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C'];
 
-// SVG icon helpers â used in all rendered delete buttons and drag handles
+// SVG icon helpers - used in all rendered delete buttons and drag handles
 const ICON_X    = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="display:block"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 const ICON_DRAG = '<svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor" style="display:block;opacity:.4"><circle cx="3" cy="2.5" r="1.2"/><circle cx="7" cy="2.5" r="1.2"/><circle cx="3" cy="7" r="1.2"/><circle cx="7" cy="7" r="1.2"/><circle cx="3" cy="11.5" r="1.2"/><circle cx="7" cy="11.5" r="1.2"/></svg>';
 const ICON_SORT = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px"><path d="M3 1v9M3 10l-2-2M3 10l2-2M8 10V1M8 1L6 3M8 1l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -468,7 +468,7 @@ let comments       = [];
 let delegate       = { keepDoing: [], delegateToday: [], delegateTrain: [], hireOutsource: [], stopEntirely: [], moreTime: [] };
 let ddDragItemId      = null;
 let ddDragFromSection = null;
-const DD_QUADRANT_KEYS = new Set(['keepDoing','delegateToday','hireOutsource','delegateTrain']);
+const DD_QUADRANT_KEYS = new Set(['keepDoing','delegateToday',=hireOutsource','delegateTrain']);
 
 let visionDebounceTimer = null;
 const customFieldDebounceTimers = new Map();
@@ -489,7 +489,7 @@ async function init() {
   } catch (err) {
     console.error('Init error:', err);
     const ind = document.getElementById('saving-indicator');
-    ind.textContent = 'Connection error â refresh to retry';
+    ind.textContent = 'Connection error \u2014 refresh to retry';
     ind.classList.add('show');
   }
 }
@@ -512,7 +512,7 @@ async function loadAll() {
   visionCustom = map['vision_custom'] || [];
   renderVisionCustom();
 
-  // Projects â seed defaults only on very first load
+  // Projects - seed defaults only on very first load
   if ('projects' in map) {
     projects = map['projects'];
   } else {
@@ -818,126 +818,15 @@ function renderProjects() {
   const list = document.getElementById('projects-list');
   list.innerHTML = '';
   updateSortToggleBtn();
-  const POPDEPôì¬èÀ°èÄ°´èÈ°¬èÌ°èÐ°´èÔ°èÙôì(½¹ÍÐ¥ÍÁ±äôÁÉ½©ÑM½ÉÑ5½ôôôÕÑ¼(ül¸¸¹ÁÉ½©ÑÍt¹Í½ÉÐ ¡±¤ôø¡A=Im¹ÁÉ¥½É¥Ñåtüüää¤´¡A=IIm¹ÁÉ¥½É¥Ñåtüüää¤¤(èÁÉ½©ÑÌì(¥ÍÁ±ä¹½É ¡Àôøì(½¹ÍÐÉô½Õµ¹Ð¹ÉÑ±µ¹Ð ¥Ø¤ì(É¹±ÍÍ9µôÁÉ½©ÐµÉì(É¹ÑÍÐ¹¥ôÀ¹¥ì(¥¡ÁÉ½©ÑM½ÉÑ5½ôôôµ¹Õ°¤ì(É¹É±ôÑÉÕì(É¹Ù¹Ñ1¥ÍÑ¹È ÉÍÑÉÐ°ôøì(¹ÑQÉ¹ÍÈ¹ÍÑÑ ÑáÐ½Á±¥¸°À¹¥¤ì(ÍÑQ¥µ½ÕÐ  ¤ôøÉ¹±ÍÍ1¥ÍÐ¹ É¥¹¤°À¤ì(ô¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É¹° ¤ôøÉ¹±ÍÍ1¥ÍÐ¹Éµ½Ù É¥¹¤¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É½ÙÈ°ôøì¹ÁÉÙ¹ÑÕ±Ð ¤ìÉ¹±ÍÍ1¥ÍÐ¹ Éµ½ÙÈ¤ìô¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É±Ù° ¤ôøÉ¹±ÍÍ1¥ÍÐ¹Éµ½Ù Éµ½ÙÈ¤¤ì(É¹Ù¹Ñ1¥ÍÑ¹È É½À°ôøì(¹ÁÉÙ¹ÑÕ±Ð ¤ì(É¹±ÍÍ1¥ÍÐ¹Éµ½Ù Éµ½ÙÈ¤ì(½¹ÍÐÉ%ô¹ÑQÉ¹ÍÈ¹ÑÑ ÑáÐ½Á±¥¸¤ì(¥¡É%ôôôÀ¹¥¤ÉÑÕÉ¸ì(½¹ÍÐÉ½´ôÁÉ½©ÑÌ¹¥¹%¹à¡àôøà¹¥ôôôÉ%¤ì(½¹ÍÐÑ¼ôÁÉ½©ÑÌ¹¥¹%¹à¡àôøà¹¥ôôôÀ¹¥¤ì(¥¡É½´ðÀñðÑ¼ðÀ¤ÉÑÕÉ¸ì(½¹ÍÐÉÈôl¸¸¹ÁÉ½©ÑÍtì(½¹ÍÐm¥ÑµtôÉÈ¹ÍÁ±¥¡É½´°Ä¤ì(ÉÈ¹ÍÁ±¥¡Ñ¼°À°¥Ñ´¤ì(ÁÉ½©ÑÌôÉÈì(ÍÙÑ ÁÉ½©ÑÌ°ÁÉ½©ÑÌ¤ì(É¹ÉAÉ½©ÑÌ ¤ì(ô¤ì(ô(½¹ÍÐÉ!¹±!Ñµ°ôÁÉ½©ÑM½ÉÑ5½ôôôµ¹Õ°(üñ¥Ø±ÍÌôÉµ¡¹±Ñ¥Ñ±ôÉÑ¼É½ÉÈøí%
-=9}Iôð½¥Øù(èì(½¹ÍÐÁÉ¥=ÁÑÌôAI%=I%Qe}=AQL¹µÀ¡¼ôøñ½ÁÑ¥½¸í¼ôôõÀ¹ÁÉ¥½É¥ÑäüÍ±Ñèôøí½ôð½½ÁÑ¥½¸ù¤¹©½¥¸ ¤ì(½¹ÍÐµ¥±ÍÑ½¹Í!Ñµ°ôÀ¹µ¥±ÍÑ½¹Ì¹µÀ¡´ôøì(½¹ÍÐÍ=ÁÑÌôMQQUM}=AQL¹µÀ¡¼ôøñ½ÁÑ¥½¸í¼ôôõ´¹ÍÑÑÕÌüÍ±Ñèôøí½ôð½½ÁÑ¥½¸ù¤¹©½¥¸ ¤ì(ÉÑÕÉ¸ñ¥Ø±ÍÌôµ¥±ÍÑ½¹µÉ½Üø(ñ¥¹ÁÕÐ±ÍÌôµ¥±ÍÑ½¹µ¥¹ÁÕÐÙ±ÕôíÍ¡´¹ÑáÐ¥ôÁ±¡½±Èô5¥±ÍÑ½¹¸¸¸½¹¡¹ôÕÁÑ5¥±ÍÑ½¹ íÀ¹¥ô°í´¹¥ô°ÑáÐ±Ñ¡¥Ì¹Ù±Õ¤ø(ñ¥¹ÁÕÐÑåÁôÑÙ±Õôí´¹ÕÑñðô½¹¡¹ôÕÁÑ5¥±ÍÑ½¹ íÀ¹¥ô°í´¹id}','dueDate',this.value)" style="border:1px solid var(--border);border-radius:var(--radius-sm);background:transparent;font-size:12px;color:var(--text-muted);padding:3px 6px;font-family:var(--font-sans);outline:none;width:100%">
-        <select class="status-badge ${STATUS_CLASSES[m.status]||'status-not-started'}" onchange="updateMilestoneStatus('${p.id}','${m.id}',this.value,this)">${sOpts}</select>
-        <button class="btn-ghost" onclick="deleteMilestone('${p.id}','${m.id}')">${ICON_X}</button>
-      </div>`;
-    }).join('');
-    card.innerHTML = `
-      <div class="project-header">
-        ${dragHandleHtml}<div class="priority-badge"><select onchange="updateProject('${p.id}','priority',this.value)">${priOpts}</select></div>
-        <div style="flex:1;min-width:0">
-          <input class="project-title-input" value="${esc(p.name)}" onchange="updateProject('${p.id}','name',this.value)">
-          <input class="project-notes-input" value="${esc(p.notes)}" placeholder="Notes..." onchange="updateProject('${p.id}','notes',this.value)">
-        </div>
-        <button class="btn-ghost" onclick="deleteProject('${p.id}')">${ICON_X}</button>
-      </div>
-      ${milestonesHtml}
-      <div class="milestone-add-row">
-        <input class="milestone-add-input" id="m-add-${p.id}" placeholder="Add a milestone..." onkeydown="if(event.key==='Enter')addMilestone('${p.id}')">
-        <button class="btn-add-inline" onclick="addMilestone('${p.id}')">+ Add</button>
-      </div>`;
-    list.appendChild(card);
-  });
-}
-
-function toggleProjectSort() {
-  if (projectSortMode === 'auto') {
-    const ord = {'A+':0,'A':1,'A-':2,'B+':3,'B':4,'B-':5,'C':6};
-    projects = [...projects].sort((a,b) => (ord[a.priority]??99)-(ord[b.priority]??99));
-    projectSortMode = 'manual';
-  } else {
-    projectSortMode = 'auto';
-  }
-  saveData('projectSortMode', projectSortMode);
-  saveData('projects', projects);
-  renderProjects();
-}
-
-function updateSortToggleBtn() {
-  const btn = document.getElementById('sort-toggle-btn');
-  if (!btn) return;
-  btn.innerHTML = projectSortMode === 'auto' ? `${ICON_SORT} Manual order` : `${ICON_SORT} Auto-sort`;
-}
-
-function updateProject(id, key, val) {
-  projects = projects.map(p => p.id === id ? { ...p, [key]: val } : p);
-  saveData('projects', projects);
-}
-
-function deleteProject(id) {
-  if (confirm('Remove this project?')) {
-    projects = projects.filter(p => p.id !== id);
-    saveData('projects', projects);
-    renderProjects();
-  }
-}
-
-function updateMilestone(pid, mid, key, val) {
-  projects = projects.map(p => p.id !== pid ? p : {
-    ...p,
-    milestones: p.milestones.map(m => m.id === mid ? { ...m, [key]: val } : m)
-  });
-  saveData('projects', projects);
-}
-
-function updateMilestoneStatus(pid, mid, val, sel) {
-  updateMilestone(pid, mid, 'status', val);
-  sel.className = 'status-badge ' + (STATUS_CLASSES[val] || 'status-not-started');
-}
-
-function deleteMilestone(pid, mid) {
-  projects = projects.map(p => p.id !== pid ? p : {
-    ...p,
-    milestones: p.milestones.filter(m => m.id !== mid)
-  });
-  saveData('projects', projects);
-  renderProjects();
-}
-
-function addMilestone(pid) {
-  const inp  = document.getElementById('m-add-' + pid);
-  const text = inp.value.trim();
-  if (!text) return;
-  projects = projects.map(p => p.id !== pid ? p : {
-    ...p,
-    milestones: [...p.milestones, { id: Date.now().toString(), text, dueDate: '', status: 'Not Started' }]
-  });
-  saveData('projects', projects);
-  inp.value = '';
-  renderProjects();
-}
-
-function showAddProject() {
-  const f = document.getElementById('add-project-form');
-  f.style.display = 'flex';
-  f.style.flexDirection = 'column';
-  document.getElementById('new-proj-name').focus();
-}
-
-function addProject() {
-  const name = document.getElementById('new-proj-name').value.trim();
-  if (!name) return;
-  const pri = document.getElementById('new-pri').value;
-  projects.push({ id: Date.now().toString(), priority: pri, name, notes: '', milestones: [] });
-  saveData('projects', projects);
-  document.getElementById('new-proj-name').value = '';
-  document.getElementById('add-project-form').style.display = 'none';
-  renderProjects();
-}
-
-// =============================================================================
-// ON MY MIND
-// =============================================================================
-function renderMind() {
-  const list = document.getElementById('mind-list');
-  if (!mind.length) { list.innerHTML = '<p class="empty-state">Nothing yet.</p>'; return; }
-  list.innerHTML = mind.map(m =>
-    `<div class="mind-item">
-      <div class="mind-item-body">
-        <div class="mind-item-text">${esc(m.text)}</div>
-        <div class="mind-item-date">${new Date(m.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+  const POPDEP��쀝��������İ����Ȱ����̰���а����԰������(������Ё���������ɽ����M���5������􀝅�Ѽ�(������l����ɽ�����t�ͽ�Р����������A=IIm���ɥ�ɥ��t���䤴�A=IIm���ɥ�ɥ��t���䤤(������ɽ������(��������乙������������(��������Ё��ɐ�􁑽�յ��й�ɕ�ѕ�����Р���؜��(������ɐ������9������ɽ���е��ɐ��(������ɐ���х͕й���������(���������ɽ����M���5������􀝵��Յ�����(��������ɐ��Ʌ����������Ք�(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ��х�М��������(������������хQɅ�͙�ȹ͕��ф��ѕ�н��������������(��������͕�Q�����Р��������ɐ������1��й������Ʌ������������(���������(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ���������������ɐ������1��йɕ��ٔ���Ʌ���������(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ��ٕȜ�������쁔��ɕٕ�����ձР�쁍�ɐ������1��й������Ʌ���ٕȜ�����(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ����ٔ�����������ɐ������1��йɕ��ٔ���Ʌ���ٕȜ���(��������ɐ����ٕ��1��ѕ��Ƞ��ɽ����������(�����������ɕٕ�����ձР��(����������ɐ������1��йɕ��ٔ���Ʌ���ٕȜ��(������������Ё�Ʌ����%��􁔹��хQɅ�͙�ȹ����ф��ѕ�н��������(�������������Ʌ����%�����������ɕ��ɸ�(������������Ё�ɽ����ɽ����̹����%���������๥�����Ʌ����%���(������������ЁѼ�����ɽ����̹����%���������๥�����������(�������������ɽ���������Ѽ������ɕ��ɸ�(������������Ё��Ȁ�l����ɽ�����t�(������������Ёm�ѕ�t���ȹ��������ɽ���Ĥ�(����������ȹ�������Ѽ������ѕ���(���������ɽ����̀����(��������ٕͅ�ф���ɽ����̜���ɽ����̤�(��������ɕ����Aɽ����̠��(���������(�����(��������Ё�Ʌ�!�����!ѵ����ɽ����M���5������􀝵��Յ��(����������؁������Ʌ����������ѥѱ��Ʌ��Ѽ�ɕ�ɑ�Ȉ���%
+=9}I�𽑥���(������耜��(��������Ё�ɥ=��̀�AI%=I%Qe}=AQL�������������ѥ�����������ɥ�ɥ�����͕���ѕ��蜝��������ѥ���������������(��������Ё�����ѽ���!ѵ����������ѽ��̹����������(����������Ё�=��̀�MQQUM}=AQL�������������ѥ�����������х������͕���ѕ��蜝��������ѥ���������������(������ɕ��ɸ���؁�����􉵥���ѽ���ɽ܈�(�����������Ё�����􉵥���ѽ�������Ј�م�Ք��͌���ѕ�Х�������������5����ѽ��������������������ѕ5����ѽ������������������������ѕ�М�ѡ�̹م�Ք���(�����������Ё����􉑅є��م�Ք�����Օ�ѕ��􈁽������������ѕ5����ѽ�������������������������Օ�є��ѡ�̹م�Ք�����屔􉉽ɑ�������ͽ����مȠ����ɑ�Ȥ퉽ɑ�ȵɅ�����مȠ��Ʌ���̵ʹ�퉅���ɽչ���Ʌ����ɕ��홽�еͥ������퍽����مȠ��ѕ�е��ѕ������������������홽�е�������مȠ�����еͅ�̤���ѱ���鹽���ݥ�Ѡ�������(���������͕���Ё�������х��̵��������MQQUM}
+1MMMm���х���u���х��̵��е�х�ѕ��􈁽������������ѕ5����ѽ��Mх��̠��������������������ѡ�̹م�Ք�ѡ�̤�����=�����͕�����(�����������ѽ��������Ѹ�����Ј��������􉑕��ѕ5����ѽ���������������������������%
+=9}a����ѽ��(������𽑥����(����������������(������ɐ������!Q50��(�������؁�������ɽ���е�����Ȉ�(����������Ʌ�!�����!ѵ���؁�������ɥ�ɥ�䵉�������͕���Ё�������������ѕAɽ���Р������������ɥ�ɥ�䜱ѡ�̹م�Ք������ɥ=�����͕�����𽑥��(���������؁��屔􉙱���������ݥ�Ѡ����(�������������Ё�������ɽ���еѥѱ������Ј�م�Ք��͌��������􈁽������������ѕAɽ���Р�����������������ѡ�̹م�Ք���(�������������Ё�������ɽ���е��ѕ̵����Ј�م�Ք��͌�����ѕ̥�������������9�ѕ̸�����������������ѕAɽ���Р�������������ѕ̜�ѡ�̹م�Ք���(��������𽑥��(�����������ѽ��������Ѹ�����Ј��������􉑕��ѕAɽ���Р��������������%
+=9}a����ѽ��(������𽑥��(�������������ѽ���!ѵ��(�������؁�����􉵥���ѽ�������ɽ܈�(�����������Ё�����􉵥���ѽ�����������Ј���􉴵���������������������������������ѽ�����������命ݸ􉥘��ٕ�й��������ѕȜ����5����ѽ���������������(�����������ѽ��������Ѹ��������������������􉅑�5����ѽ����������������������ѽ��(������𽑥����(�������й������
+�������ɐ��(�����)�()�չ�ѥ���ѽ����Aɽ����M��Р���(�������ɽ����M���5������􀝅�Ѽ����(��������Ё�ɐ�����������İ����Ȱ����̰���а����԰������(�����ɽ����̀�l����ɽ�����t�ͽ�Р�����������ɑm���ɥ�ɥ��t���䤴��ɑm���ɥ�ɥ��t���䤤�(�����ɽ����M���5����􀝵��Յ���(��􁕱͔��(�����ɽ����M���5����􀝅�Ѽ��(���(��ٕͅ�ф���ɽ����M���5�������ɽ����M���5�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(��ɕ����Aɽ����̠��)�()�չ�ѥ�������ѕM���Q�����	Ѹ����(������Ё�Ѹ�􁑽�յ��й���������	�%���ͽ�еѽ������Ѹ���(��������Ѹ��ɕ��ɸ�(���Ѹ������!Q50���ɽ����M���5������􀝅�Ѽ�������%
+=9}M=IQ�5��Յ���ɑ�ɀ�聀��%
+=9}M=IQ��Ѽ�ͽ�р�)�()�չ�ѥ�������ѕAɽ���С������䰁م����(���ɽ����̀��ɽ����̹����������������􁥐���쀸�����m���t�م�������(��ٕͅ�ф���ɽ����̜���ɽ����̤�)�()�չ�ѥ�������ѕAɽ���С�����(�����������ɴ��I���ٔ�ѡ�́�ɽ����������(�����ɽ����̀��ɽ����̹���ѕȡ������������􁥐��(����ٕͅ�ф���ɽ����̜���ɽ����̤�(����ɕ����Aɽ����̠��(���)�()�չ�ѥ�������ѕ5����ѽ���������������䰁م����(���ɽ����̀��ɽ����̹���������������������������(���������(���������ѽ�����������ѽ��̹����������������􁵥����쀸�����m���t�م���聴�(�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�)�()�չ�ѥ�������ѕ5����ѽ��Mх��̡����������م���͕����(������ѕ5����ѽ���������������х��̜��م���(��͕�������9������х��̵�����������MQQUM}
+1MMMmم�t������х��̵��е�х�ѕ����)�()�չ�ѥ�������ѕ5����ѽ��������������(���ɽ����̀��ɽ����̹���������������������������(���������(���������ѽ�����������ѽ��̹���ѕȡ������������􁵥��(�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(��ɕ����Aɽ����̠��)�()�չ�ѥ������5����ѽ���������(������Ё�����􁑽�յ��й���������	�%������������������(������Ёѕ�Ѐ􁥹��م�Ք��ɥ����(�������ѕ�Ф�ɕ��ɸ�(���ɽ����̀��ɽ����̹���������������������������(���������(���������ѽ����l����������ѽ��̰�쁥���є���ܠ��ѽM�ɥ������ѕ�а��Օ�є耜����х���耝9�ЁMх�ѕ����t(�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(������م�Ք�􀜜�(��ɕ����Aɽ����̠��)�()�չ�ѥ���͡����Aɽ���Р���(������Ё��􁑽�յ��й���������	�%��������ɽ���е��ɴ���(������屔��������􀝙�����(������屔������ɕ�ѥ���􀝍��յ���(�����յ��й���������	�%�����ܵ�ɽ�������������̠��)�()�չ�ѥ������Aɽ���Р���(������Ё�����􁑽�յ��й���������	�%�����ܵ�ɽ���������م�Ք��ɥ����(�������������ɕ��ɸ�(������Ё�ɤ�􁑽�յ��й���������	�%�����ܵ�ɤ���م�Ք�(���ɽ����̹��͠�쁥���є���ܠ��ѽM�ɥ�������ɥ�ɥ����ɤ����������ѕ�耜��������ѽ����mt����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(�����յ��й���������	�%�����ܵ�ɽ���������م�Ք�􀜜�(�����յ��й���������	�%��������ɽ���е��ɴ�����屔��������􀝹�����(��ɕ����Aɽ����̠��)�((��������������������������������������������������������������������������������(���=8�5d�5%9(��������������������������������������������������������������������������������)�չ�ѥ���ɕ����5�������(������Ё���Ѐ􁑽�յ��й���������	�%�����������М��(����������������Ѡ��쁱��й�����!Q50����������􉕵����хє��9�ѡ�����и�����ɕ��ɸ��(�����й�����!Q50�􁵥�����������(������؁�����􉵥����ѕ���(�������؁�����􉵥����ѕ�������(���������؁�����􉵥����ѕ��ѕ�Ј���͌���ѕ�Х�𽑥��(���������؁�����􉵥����ѕ����є������܁�є��������Ф�ѽ1������ѕM�ɥ�������UL������Ѡ�͡��М����蝹յ�ɥ���啅�蝹յ�ɥ�����our:'2-digit',minute:'2-digit'})}</div>
       </div>
       <button class="btn-ghost" onclick="deleteMind('${m.id}')">${ICON_X}</button>
     </div>`
@@ -975,11 +864,11 @@ function renderSessions() {
         <span class="session-card-title">${new Date(s.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})}</span>
         <div style="display:flex;gap:8px;align-items:center">
           <button class="btn-ghost" onclick="event.stopPropagation();deleteSession('${s.id}')">${ICON_X}</button>
-          <span class="chevron" id="chev-${s.id}">â¼</span>
+          <span class="chevron" id="chev-${s.id}">&#x25BC;</span>
         </div>
       </div>
       <div class="session-card-body" id="sbody-${s.id}">
-        ${s.covered     ? `<div class="session-field"><div class="session-field-label">What we covered</div><div class="session-field-value">${esc(s.covered)}</div></div>`     : ''}
+        ${s.covered     ? `<div class="session-field"><div class="session-field-label">What we covered</div><div class="session-field-value">${esc(s.covered)}</div></div>`      : ''}
         ${s.commitments ? `<div class="session-field"><div class="session-field-label">Commitments</div><div class="session-field-value">${esc(s.commitments)}</div></div>` : ''}
         ${s.next        ? `<div class="session-field"><div class="session-field-label">Next steps</div><div class="session-field-value">${esc(s.next)}</div></div>`           : ''}
       </div>
@@ -991,7 +880,7 @@ function toggleSession(id) {
   const b = document.getElementById('sbody-'  + id);
   const c = document.getElementById('chev-' + id);
   b.classList.toggle('open');
-  c.textContent = b.classList.contains('open') ? 'â²' : 'â¼';
+  c.textContent = b.classList.contains('open') ? '\u25b2' : '\u25bc';
 }
 
 function deleteSession(id) {
@@ -1037,7 +926,7 @@ function renderWins() {
   if (!wins.length) { list.innerHTML = '<p class="empty-state">No wins logged yet. Add the first one.</p>'; return; }
   list.innerHTML = wins.map(w =>
     `<div class="win-item">
-      <div class="win-icon">â</div>
+      <div class="win-icon">&#x2605;</div>
       <div class="win-item-body">
         <div class="win-item-text">${esc(w.text)}</div>
         <div class="win-item-date">${new Date(w.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
