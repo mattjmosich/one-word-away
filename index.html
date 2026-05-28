@@ -196,7 +196,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
 
   <!-- VISION -->
   <div id="tab-vision" class="tab-content active">
-    <p class="hint">Koow where we're going so we can map the way there.</p>
+    <p class="hint">Know where we're going so we can map the way there.</p>
     <div class="field-group">
       <label class="field-label">The core belief</label>
       <p class="field-hint">Underneath all of it &mdash; what's the one belief you keep coming back to?</p>
@@ -263,7 +263,7 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
     <p class="hint">Add it when you think of it.</p>
     <div class="mind-input-row">
       <input type="text" id="mind-input" placeholder="What's on your mind..." onkeydown="if(event.key==='Enter')addMind()">
-      <button class="btn-primary" onclick="addMind()">Add</button>
+      <butt/n class="btn-primary" onclick="addMind()">Add</button>
     </div>
     <div id="mind-list"></div>
   </div>
@@ -468,7 +468,7 @@ let comments       = [];
 let delegate       = { keepDoing: [], delegateToday: [], delegateTrain: [], hireOutsource: [], stopEntirely: [], moreTime: [] };
 let ddDragItemId      = null;
 let ddDragFromSection = null;
-const DD_QUADRANT_KEYS = new Set(['keepDoing','delegateToday',=hireOutsource','delegateTrain']);
+const DD_QUADRANT_KEYS = new Set(['keepDoing','delegateToday','hireOutsource','delegateTrain']);
 
 let visionDebounceTimer = null;
 const customFieldDebounceTimers = new Map();
@@ -818,15 +818,166 @@ function renderProjects() {
   const list = document.getElementById('projects-list');
   list.innerHTML = '';
   updateSortToggleBtn();
-  const POPDEP��쀝��������İ����Ȱ����̰���а����԰������(������Ё���������ɽ����M���5������􀝅�Ѽ�(������l����ɽ�����t�ͽ�Р����������A=IIm���ɥ�ɥ��t���䤴�A=IIm���ɥ�ɥ��t���䤤(������ɽ������(��������乙������������(��������Ё��ɐ�􁑽�յ��й�ɕ�ѕ�����Р���؜��(������ɐ������9������ɽ���е��ɐ��(������ɐ���х͕й���������(���������ɽ����M���5������􀝵��Յ�����(��������ɐ��Ʌ����������Ք�(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ��х�М��������(������������хQɅ�͙�ȹ͕��ф��ѕ�н��������������(��������͕�Q�����Р��������ɐ������1��й������Ʌ������������(���������(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ���������������ɐ������1��йɕ��ٔ���Ʌ���������(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ��ٕȜ�������쁔��ɕٕ�����ձР�쁍�ɐ������1��й������Ʌ���ٕȜ�����(��������ɐ����ٕ��1��ѕ��Ƞ��Ʌ����ٔ�����������ɐ������1��йɕ��ٔ���Ʌ���ٕȜ���(��������ɐ����ٕ��1��ѕ��Ƞ��ɽ����������(�����������ɕٕ�����ձР��(����������ɐ������1��йɕ��ٔ���Ʌ���ٕȜ��(������������Ё�Ʌ����%��􁔹��хQɅ�͙�ȹ����ф��ѕ�н��������(�������������Ʌ����%�����������ɕ��ɸ�(������������Ё�ɽ����ɽ����̹����%���������๥�����Ʌ����%���(������������ЁѼ�����ɽ����̹����%���������๥�����������(�������������ɽ���������Ѽ������ɕ��ɸ�(������������Ё��Ȁ�l����ɽ�����t�(������������Ёm�ѕ�t���ȹ��������ɽ���Ĥ�(����������ȹ�������Ѽ������ѕ���(���������ɽ����̀����(��������ٕͅ�ф���ɽ����̜���ɽ����̤�(��������ɕ����Aɽ����̠��(���������(�����(��������Ё�Ʌ�!�����!ѵ����ɽ����M���5������􀝵��Յ��(����������؁������Ʌ����������ѥѱ��Ʌ��Ѽ�ɕ�ɑ�Ȉ���%
-=9}I�𽑥���(������耜��(��������Ё�ɥ=��̀�AI%=I%Qe}=AQL�������������ѥ�����������ɥ�ɥ�����͕���ѕ��蜝��������ѥ���������������(��������Ё�����ѽ���!ѵ����������ѽ��̹����������(����������Ё�=��̀�MQQUM}=AQL�������������ѥ�����������х������͕���ѕ��蜝��������ѥ���������������(������ɕ��ɸ���؁�����􉵥���ѽ���ɽ܈�(�����������Ё�����􉵥���ѽ�������Ј�م�Ք��͌���ѕ�Х�������������5����ѽ��������������������ѕ5����ѽ������������������������ѕ�М�ѡ�̹م�Ք���(�����������Ё����􉑅є��م�Ք�����Օ�ѕ��􈁽������������ѕ5����ѽ�������������������������Օ�є��ѡ�̹م�Ք�����屔􉉽ɑ�������ͽ����مȠ����ɑ�Ȥ퉽ɑ�ȵɅ�����مȠ��Ʌ���̵ʹ�퉅���ɽչ���Ʌ����ɕ��홽�еͥ������퍽����مȠ��ѕ�е��ѕ������������������홽�е�������مȠ�����еͅ�̤���ѱ���鹽���ݥ�Ѡ�������(���������͕���Ё�������х��̵��������MQQUM}
-1MMMm���х���u���х��̵��е�х�ѕ��􈁽������������ѕ5����ѽ��Mх��̠��������������������ѡ�̹م�Ք�ѡ�̤�����=�����͕�����(�����������ѽ��������Ѹ�����Ј��������􉑕��ѕ5����ѽ���������������������������%
-=9}a����ѽ��(������𽑥����(����������������(������ɐ������!Q50��(�������؁�������ɽ���е�����Ȉ�(����������Ʌ�!�����!ѵ���؁�������ɥ�ɥ�䵉�������͕���Ё�������������ѕAɽ���Р������������ɥ�ɥ�䜱ѡ�̹م�Ք������ɥ=�����͕�����𽑥��(���������؁��屔􉙱���������ݥ�Ѡ����(�������������Ё�������ɽ���еѥѱ������Ј�م�Ք��͌��������􈁽������������ѕAɽ���Р�����������������ѡ�̹م�Ք���(�������������Ё�������ɽ���е��ѕ̵����Ј�م�Ք��͌�����ѕ̥�������������9�ѕ̸�����������������ѕAɽ���Р�������������ѕ̜�ѡ�̹م�Ք���(��������𽑥��(�����������ѽ��������Ѹ�����Ј��������􉑕��ѕAɽ���Р��������������%
-=9}a����ѽ��(������𽑥��(�������������ѽ���!ѵ��(�������؁�����􉵥���ѽ�������ɽ܈�(�����������Ё�����􉵥���ѽ�����������Ј���􉴵���������������������������������ѽ�����������命ݸ􉥘��ٕ�й��������ѕȜ����5����ѽ���������������(�����������ѽ��������Ѹ��������������������􉅑�5����ѽ����������������������ѽ��(������𽑥����(�������й������
-�������ɐ��(�����)�()�չ�ѥ���ѽ����Aɽ����M��Р���(�������ɽ����M���5������􀝅�Ѽ����(��������Ё�ɐ�����������İ����Ȱ����̰���а����԰������(�����ɽ����̀�l����ɽ�����t�ͽ�Р�����������ɑm���ɥ�ɥ��t���䤴��ɑm���ɥ�ɥ��t���䤤�(�����ɽ����M���5����􀝵��Յ���(��􁕱͔��(�����ɽ����M���5����􀝅�Ѽ��(���(��ٕͅ�ф���ɽ����M���5�������ɽ����M���5�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(��ɕ����Aɽ����̠��)�()�չ�ѥ�������ѕM���Q�����	Ѹ����(������Ё�Ѹ�􁑽�յ��й���������	�%���ͽ�еѽ������Ѹ���(��������Ѹ��ɕ��ɸ�(���Ѹ������!Q50���ɽ����M���5������􀝅�Ѽ�������%
-=9}M=IQ�5��Յ���ɑ�ɀ�聀��%
-=9}M=IQ��Ѽ�ͽ�р�)�()�չ�ѥ�������ѕAɽ���С������䰁م����(���ɽ����̀��ɽ����̹����������������􁥐���쀸�����m���t�م�������(��ٕͅ�ф���ɽ����̜���ɽ����̤�)�()�չ�ѥ�������ѕAɽ���С�����(�����������ɴ��I���ٔ�ѡ�́�ɽ����������(�����ɽ����̀��ɽ����̹���ѕȡ������������􁥐��(����ٕͅ�ф���ɽ����̜���ɽ����̤�(����ɕ����Aɽ����̠��(���)�()�չ�ѥ�������ѕ5����ѽ���������������䰁م����(���ɽ����̀��ɽ����̹���������������������������(���������(���������ѽ�����������ѽ��̹����������������􁵥����쀸�����m���t�م���聴�(�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�)�()�չ�ѥ�������ѕ5����ѽ��Mх��̡����������م���͕����(������ѕ5����ѽ���������������х��̜��م���(��͕�������9������х��̵�����������MQQUM}
-1MMMmم�t������х��̵��е�х�ѕ����)�()�չ�ѥ�������ѕ5����ѽ��������������(���ɽ����̀��ɽ����̹���������������������������(���������(���������ѽ�����������ѽ��̹���ѕȡ������������􁵥��(�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(��ɕ����Aɽ����̠��)�()�չ�ѥ������5����ѽ���������(������Ё�����􁑽�յ��й���������	�%������������������(������Ёѕ�Ѐ􁥹��م�Ք��ɥ����(�������ѕ�Ф�ɕ��ɸ�(���ɽ����̀��ɽ����̹���������������������������(���������(���������ѽ����l����������ѽ��̰�쁥���є���ܠ��ѽM�ɥ������ѕ�а��Օ�є耜����х���耝9�ЁMх�ѕ����t(�����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(������م�Ք�􀜜�(��ɕ����Aɽ����̠��)�()�չ�ѥ���͡����Aɽ���Р���(������Ё��􁑽�յ��й���������	�%��������ɽ���е��ɴ���(������屔��������􀝙�����(������屔������ɕ�ѥ���􀝍��յ���(�����յ��й���������	�%�����ܵ�ɽ�������������̠��)�()�չ�ѥ������Aɽ���Р���(������Ё�����􁑽�յ��й���������	�%�����ܵ�ɽ���������م�Ք��ɥ����(�������������ɕ��ɸ�(������Ё�ɤ�􁑽�յ��й���������	�%�����ܵ�ɤ���م�Ք�(���ɽ����̹��͠�쁥���є���ܠ��ѽM�ɥ�������ɥ�ɥ����ɤ����������ѕ�耜��������ѽ����mt����(��ٕͅ�ф���ɽ����̜���ɽ����̤�(�����յ��й���������	�%�����ܵ�ɽ���������م�Ք�􀜜�(�����յ��й���������	�%��������ɽ���е��ɴ�����屔��������􀝹�����(��ɕ����Aɽ����̠��)�((��������������������������������������������������������������������������������(���=8�5d�5%9(��������������������������������������������������������������������������������)�չ�ѥ���ɕ����5�������(������Ё���Ѐ􁑽�յ��й���������	�%�����������М��(����������������Ѡ��쁱��й�����!Q50����������􉕵����хє��9�ѡ�����и�����ɕ��ɸ��(�����й�����!Q50�􁵥�����������(������؁�����􉵥����ѕ���(�������؁�����􉵥����ѕ�������(���������؁�����􉵥����ѕ��ѕ�Ј���͌���ѕ�Х�𽑥��(���������؁�����􉵥����ѕ����є������܁�є��������Ф�ѽ1������ѕM�ɥ�������UL������Ѡ�͡��М����蝹յ�ɥ���啅�蝹յ�ɥ�����our:'2-digit',minute:'2-digit'})}</div>
+  const PORDER = {'A+':0,'A':1,'A-':2,'B+':3,'B':4,'B-':5,'C':6};
+  const display = projectSortMode === 'auto'
+    ? [...projects].sort((a,b) => (PORDER[a.priority]??99)-(PORDER[b.priority]??99))
+    : projects;
+  display.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.dataset.id = p.id;
+    if (projectSortMode === 'manual') {
+      card.draggable = true;
+      card.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', p.id);
+        setTimeout(() => card.classList.add('dragging'), 0);
+      });
+      card.addEventListener('dragend', () => card.classList.remove('dragging'));
+      card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
+      card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+      card.addEventListener('drop', e => {
+        e.preventDefault();
+        card.classList.remove('drag-over');
+        const draggedId = e.dataTransfer.getData('text/plain');
+        if (draggedId === p.id) return;
+        const from = projects.findIndex(x => x.id === draggedId);
+        const to   = projects.findIndex(x => x.id === p.id);
+        if (from < 0 || to < 0) return;
+        const arr = [...projects];
+        const [item] = arr.splice(from, 1);
+        arr.splice(to, 0, item);
+        projects = arr;
+        saveData('projects', projects);
+        renderProjects();
+      });
+    }
+    const dragHandleHtml = projectSortMode === 'manual'
+      ? `<div class="drag-handle" title="Drag to reorder">${ICON_DRAG}</div>`
+      : '';
+    const priOpts = PRIORITY_OPTS.map(o => `<option${o===p.priority?' selected':''}>${o}</option>`).join('');
+    const milestonesHtml = p.milestones.map(m => {
+      const sOpts = STATUS_OPTS.map(o => `<option${o===m.status?' selected':''}>${o}</option>`).join('');
+      return `<div class="milestone-row">
+        <input class="milestone-input" value="${esc(m.text)}" placeholder="Milestone..." onchange="updateMilestone('${p.id}','${m.id}','text',this.value)">
+        <input type="date" value="${m.dueDate||''}" onchange="updateMilestone('${p.id}','${m.id}','dueDate',this.value)" style="border:1px solid var(--border);border-radius:var(--radius-sm);background:transparent;font-size:12px;color:var(--text-muted);padding:3px 6px;font-family:var(--font-sans);outline:none;width:100%">
+        <select class="status-badge ${STATUS_CLASSES[m.status]||'status-not-started'}" onchange="updateMilestoneStatus('${p.id}','${m.id}',this.value,this)">${sOpts}</select>
+        <button class="btn-ghost" onclick="deleteMilestone('${p.id}','${m.id}')">${ICON_X}</button>
+      </div>`;
+    }).join('');
+    card.innerHTML = `
+      <div class="project-header">
+        ${dragHandleHtml}<div class="priority-badge"><select onchange="updateProject('${p.id}','priority',this.value)">${priOpts}</select></div>
+        <div style="flex:1;min-width:0">
+          <input class="project-title-input" value="${esc(p.name)}" onchange="updateProject('${p.id}','name',this.value)">
+          <input class="project-notes-input" value="${esc(p.notes)}" placeholder="Notes..." onchange="updateProject('${p.id}','notes',this.value)">
+        </div>
+        <button class="btn-ghost" onclick="deleteProject('${p.id}')">${ICON_X}</button>
+      </div>
+      ${milestonesHtml}
+      <div class="milestone-add-row">
+        <input class="milestone-add-input" id="m-add-${p.id}" placeholder="Add a milestone..." onkeydown="if(event.key==='Enter')addMilestone('${p.id}')">
+        <button class="btn-add-inline" onclick="addMilestone('${p.id}')">+ Add</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function toggleProjectSort() {
+  if (projectSortMode === 'auto') {
+    const ord = {'A+':0,'A':1,'A-':2,'B+':3,'B':4,'B-':5,'C':6};
+    projects = [...projects].sort((a,b) => (ord[a.priority]??99)-(ord[b.priority]??99));
+    projectSortMode = 'manual';
+  } else {
+    projectSortMode = 'auto';
+  }
+  saveData('projectSortMode', projectSortMode);
+  saveData('projects', projects);
+  renderProjects();
+}
+
+function updateSortToggleBtn() {
+  const btn = document.getElementById('sort-toggle-btn');
+  if (!btn) return;
+  btn.innerHTML = projectSortMode === 'auto' ? `${ICON_SORT} Manual order` : `${ICON_SORT} Auto-sort`;
+}
+
+function updateProject(id, key, val) {
+  projects = projects.map(p => p.id === id ? { ...p, [key]: val } : p);
+  saveData('projects', projects);
+}
+
+function deleteProject(id) {
+  if (confirm('Remove this project?')) {
+    projects = projects.filter(p => p.id !== id);
+    saveData('projects', projects);
+    renderProjects();
+  }
+}
+
+function updateMilestone(pid, mid, key, val) {
+  projects = projects.map(p => p.id !== pid ? p : {
+    ...p,
+    milestones: p.milestones.map(m => m.id === mid ? { ...m, [key]: val } : m)
+  });
+  saveData('projects', projects);
+}
+
+function updateMilestoneStatus(pid, mid, val, sel) {
+  updateMilestone(pid, mid, 'status', val);
+  sel.className = 'status-badge ' + (STATUS_CLASSES[val] || 'status-not-started');
+}
+
+function deleteMilestone(pid, mid) {
+  projects = projects.map(p => p.id !== pid ? p : {
+    ...p,
+    milestones: p.milestones.filter(m => m.id !== mid)
+  });
+  saveData('projects', projects);
+  renderProjects();
+}
+
+function addMilestone(pid) {
+  const inp  = document.getElementById('m-add-' + pid);
+  const text = inp.value.trim();
+  if (!text) return;
+  projects = projects.map(p => p.id !== pid ? p : {
+    ...p,
+    milestones: [...p.milestones, { id: Date.now().toString(), text, dueDate: '', status: 'Not Started' }]
+  });
+  saveData('projects', projects);
+  inp.value = '';
+  renderProjects();
+}
+
+function showAddProject() {
+  const f = document.getElementById('add-project-form');
+  f.style.display = 'flex';
+  f.style.flexDirection = 'column';
+  document.getElementById('new-proj-name').focus();
+}
+
+function addProject() {
+  const name = document.getElementById('new-proj-name').value.trim();
+  if (!name) return;
+  const pri = document.getElementById('new-pri').value;
+  projects.push({ id: Date.now().toString(), priority: pri, name, notes: '', milestones: [] });
+  saveData('projects', projects);
+  document.getElementById('new-proj-name').value = '';
+  document.getElementById('add-project-form').style.display = 'none';
+  renderProjects();
+}
+
+// =============================================================================
+// ON MY MIND
+// =============================================================================
+function renderMind() {
+  const list = document.getElementById('mind-list');
+  if (!mind.length) { list.innerHTML = '<p class="empty-state">Nothing yet.</p>'; return; }
+  list.innerHTML = mind.map(m =>
+    `<div class="mind-item">
+      <div class="mind-item-body">
+        <div class="mind-item-text">${esc(m.text)}</div>
+        <div class="mind-item-date">${new Date(m.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
       </div>
       <button class="btn-ghost" onclick="deleteMind('${m.id}')">${ICON_X}</button>
     </div>`
@@ -868,7 +1019,7 @@ function renderSessions() {
         </div>
       </div>
       <div class="session-card-body" id="sbody-${s.id}">
-        ${s.covered     ? `<div class="session-field"><div class="session-field-label">What we covered</div><div class="session-field-value">${esc(s.covered)}</div></div>`      : ''}
+        ${s.covered     ? `<div class="session-field"><div class="session-field-label">What we covered</div><div class="session-field-value">${esc(s.covered)}</div></div>`     : ''}
         ${s.commitments ? `<div class="session-field"><div class="session-field-label">Commitments</div><div class="session-field-value">${esc(s.commitments)}</div></div>` : ''}
         ${s.next        ? `<div class="session-field"><div class="session-field-label">Next steps</div><div class="session-field-value">${esc(s.next)}</div></div>`           : ''}
       </div>
