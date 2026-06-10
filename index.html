@@ -46,13 +46,6 @@ body { font-family: var(--font-sans); background: var(--bg); color: var(--text);
 .field-label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
 .field-label-editable { border: none; background: transparent; outline: none; font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: var(--text); width: 100%; display: block; margin-bottom: 4px; }
 .field-hint { font-size: 12px; color: var(--text-muted); font-style: italic; margin-bottom: 6px; line-height: 1.5; }
-.yes-no-guide { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 1.5rem; }
-.yes-no-guide-title { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
-.yes-no-guide-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 6px; font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-.yes-no-guide-row:last-child { margin-bottom: 0; }
-.yes-no-badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: var(--radius-sm); flex-shrink: 0; margin-top: 1px; letter-spacing: 0.04em; }
-.yes-no-badge.yes { background: #e6f4ea; color: #2d6a3f; }
-.yes-no-badge.no { background: #fdecea; color: #8b2d2d; }
 textarea, input[type=text], input[type=date] {
   width: 100%; border: 1px solid var(--border-strong); border-radius: var(--radius-md);
   padding: 10px 12px; font-size: 14px; font-family: var(--font-sans); color: var(--text);
@@ -213,17 +206,6 @@ textarea:focus, input[type=text]:focus, input[type=date]:focus { border-color: v
       <label class="field-label">Who you're becoming</label>
       <p class="field-hint">You've built things your whole career. Who are you becoming now that the building is mostly done?</p>
       <textarea id="v-becoming" rows="3" placeholder="..." oninput="saveVision()"></textarea>
-    </div>
-    <div class="yes-no-guide">
-      <p class="yes-no-guide-title">How to decide</p>
-      <div class="yes-no-guide-row">
-        <span class="yes-no-badge yes">YES</span>
-        <span>Advances who you&rsquo;re becoming &mdash; fits the core belief &mdash; creates the legacy &mdash; your energy rises thinking about it</span>
-      </div>
-      <div class="yes-no-guide-row">
-        <span class="yes-no-badge no">NO</span>
-        <span>Obligation not aspiration &mdash; someone else&rsquo;s priority &mdash; pulls attention backward &mdash; you&rsquo;d feel relieved if it disappeared</span>
-      </div>
     </div>
     <div class="field-group">
       <label class="field-label">What gets a yes</label>
